@@ -1,0 +1,64 @@
+{
+ "id": "/",
+ "name": "Burger Rush",
+ "short_name": "Burger Rush",
+ "description": "Run a busy burger restaurant: cook, stack, wrap and serve before customers get angry.",
+ "lang": "en",
+ "dir": "ltr",
+ "categories": [
+  "games",
+  "entertainment"
+ ],
+ "start_url": "/",
+ "scope": "/",
+ "display": "fullscreen",
+ "display_override": [
+  "fullscreen",
+  "standalone"
+ ],
+ "orientation": "landscape",
+ "background_color": "#2d1e1a",
+ "theme_color": "#c0392b",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icon-maskable-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "maskable"
+  },
+  {
+   "src": "icon-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "screenshots": [
+  {
+   "src": "screenshots/game.png",
+   "sizes": "1280x720",
+   "type": "image/png",
+   "form_factor": "wide",
+   "label": "Run the kitchen"
+  },
+  {
+   "src": "screenshots/start.png",
+   "sizes": "720x1280",
+   "type": "image/png",
+   "form_factor": "narrow",
+   "label": "Be a chef"
+  }
+ ]
+}

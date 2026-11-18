@@ -1,0 +1,2432 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#c0392b"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Burger Rush">
+<title>Burger Rush</title><link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><style>
+:root{--bg:#fff6e5;--card:#fff;--ink:#2b1d12;--mut:#7a6a58;--red:#c0392b;--gold:#e0a800;--ok:#2e9e4f;--line:#e8d8bd;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1610;--card:#2a2018;--ink:#f6ead8;--mut:#b9a68e;--line:#42342a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1d1610;--card:#2a2018;--ink:#f6ead8;--mut:#b9a68e;--line:#42342a;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;touch-action:manipulation}
+#app{max-width:480px;margin:0 auto;padding:8px 10px 40px}
+.h{font-weight:700;margin:12px 0 4px;color:var(--mut);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:6px}
+.row{display:flex;gap:6px;flex-wrap:wrap}
+.btn{flex:1;min-width:56px;border:0;border-radius:10px;padding:11px 6px;background:var(--red);color:#fff;font:700 14px inherit;font-family:inherit;text-align:center;cursor:pointer}
+.btn.alt{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.ok{background:var(--ok)}.btn[disabled]{opacity:.4}
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin-top:5px}.bar i{display:block;height:100%}
+#hud{display:flex;justify-content:space-between;align-items:center;gap:6px;font-weight:700;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:6px 0;z-index:5}
+#msg{min-height:20px;color:var(--mut);font-size:13px}
+.o{cursor:pointer}.o.vip{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.o b{display:flex;justify-content:space-between;gap:8px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.it{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px;text-align:center;font-size:22px;cursor:pointer}
+.it small{display:block;font-size:11px;color:var(--mut)}
+.it.ready{border-color:var(--ok)}.it.burnt{border-color:#555;opacity:.7}
+.chip{display:inline-block;padding:7px 10px;margin:0 6px 6px 0;border-radius:18px;background:var(--card);border:1px solid var(--line);cursor:pointer;font-size:16px}
+.plate{min-height:46px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.plate span{padding:3px 14px;border-radius:8px;background:var(--line);font-size:14px}
+#scr{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);overflow:auto;padding:calc(14px + env(safe-area-inset-top,0px)) 14px 40px;display:none;z-index:9}
+#scr .in{max-width:480px;margin:0 auto}
+h1{margin:6px 0}table{width:100%;border-collapse:collapse}
+.ttl{font:900 46px/1 system-ui,sans-serif;letter-spacing:.04em;color:var(--red);text-shadow:0 3px 0 var(--gold);animation:pop .7s both}.ttl.s{font-size:28px;text-align:center;margin:4px 0 14px}
+.stk{width:190px;margin:26px auto 18px;display:flex;flex-direction:column-reverse;align-items:center;animation:bnc .6s 3.2s both}
+.l{width:100%;animation:drop .5s var(--d) cubic-bezier(.3,1.5,.5,1) both}
+.bunt{height:42px;border-radius:100px 100px 14px 14px;background:radial-gradient(circle at 30% 35%,#fff9 0 2px,transparent 3px),radial-gradient(circle at 60% 25%,#fff9 0 2px,transparent 3px),radial-gradient(circle at 75% 50%,#fff9 0 2px,transparent 3px),#d9892b}
+.bunb{height:26px;border-radius:6px 6px 26px 26px;background:#c27a22}.pat{height:24px;border-radius:12px;background:#5a2d17;width:104%}
+.chz{height:12px;background:#f5c518;width:112%;border-radius:2px 2px 10px 10px}.let{height:12px;background:#4caf50;width:108%;border-radius:12px}.tom{height:10px;background:#e53935;border-radius:5px}
+.tap{margin-top:8px;color:var(--mut);opacity:0;animation:blink 1.2s 3.6s infinite both}
+.bg{margin:0 auto;max-width:360px;display:flex;flex-direction:column}
+.ly{padding:14px 16px;font-weight:600;color:#2b1d12;animation:slide .5s var(--d) both}
+.ly b{display:inline-block;width:26px;height:26px;line-height:26px;text-align:center;border-radius:50%;background:#fff8;margin-right:8px}
+.bt{background:#d9892b;border-radius:60px 60px 10px 10px;padding-top:24px}.pt{background:#5a2d17;color:#fff;border-radius:14px;margin:2px 0}
+.ch{background:#f5c518;border-radius:3px 3px 18px 18px;margin-bottom:2px}.bb{background:#c27a22;border-radius:8px 8px 34px 34px;padding-bottom:24px}
+.chef{width:100%;margin-top:20px;font-size:20px;padding:16px;background:linear-gradient(135deg,#e53935,#ff9800);animation:pulse 1.4s infinite}.chef small{font-size:12px;letter-spacing:.2em}
+@keyframes drop{from{transform:translateY(-320px) rotate(-6deg);opacity:0}to{transform:none;opacity:1}}
+@keyframes pop{from{transform:scale(.5);opacity:0}to{transform:none;opacity:1}}
+@keyframes bnc{0%,100%{transform:none}40%{transform:scale(1.08,.92)}70%{transform:scale(.97,1.05)}}
+@keyframes blink{0%,100%{opacity:.25}50%{opacity:1}}
+@keyframes slide{from{transform:translateX(-40px);opacity:0}to{transform:none;opacity:1}}
+@keyframes pulse{50%{transform:scale(1.04)}}td{padding:4px 2px;border-bottom:1px solid var(--line)}
+details{margin-top:14px}summary{font-weight:700;cursor:pointer}
+
+
+html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;background:repeating-conic-gradient(#2d1e1a 0 25%,#35231c 0 50%) 0 0/56px 56px;-webkit-touch-callout:none}
+#gw{display:none;position:fixed;top:0;left:0;right:0;bottom:0}
+#cv{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(calc(100vw - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px)),160vh);aspect-ratio:960/600;touch-action:none;box-shadow:0 0 40px #000a}
+#rot{display:none;position:absolute;inset:0;background:#2d1e1a;color:#ffe9c7;flex-direction:column;align-items:center;justify-content:center;gap:22px;font:700 20px system-ui,sans-serif;text-align:center;padding:20px}
+.ph{width:54px;height:96px;border:5px solid #ffe9c7;border-radius:12px;position:relative;animation:turn 2.2s ease-in-out infinite}.ph:after{content:"";position:absolute;left:50%;bottom:6px;width:16px;height:4px;margin-left:-8px;background:#ffe9c7;border-radius:2px}
+@keyframes turn{0%,20%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
+@media (orientation:portrait){#gw.on #cv{display:none}#gw.on #rot{display:flex}}
+#scr{overflow:auto}
+</style></head><body>
+<div id="scr"></div><div id="gw"><canvas id="cv" width="960" height="600"></canvas><div id="rot"><div class="ph"></div><div>Turn your phone sideways<br>to play Burger Rush</div></div></div>
+<script>
+"use strict";
+class KW{constructor(o){this.o=o}}const $kw=o=>new KW(o);
+const $d=(o,n,f)=>Object.defineProperty(o,n,{value:f,writable:true,configurable:true,enumerable:false});
+const $nk=k=>Array.isArray(k)?"\u0001"+JSON.stringify(k):k;
+class PyDict{constructor(e){this.m=new Map();if(e)for(const[k,v]of e)this.m.set($nk(k),[k,v])}
+ get(k,d=null){const e=this.m.get($nk(k));return e?e[1]:d}set(k,v){this.m.set($nk(k),[k,v])}has(k){return this.m.has($nk(k))}
+ items(){return[...this.m.values()].map(e=>[e[0],e[1]])}keys(){return[...this.m.values()].map(e=>e[0])}values(){return[...this.m.values()].map(e=>e[1])}
+ pop(k,d=null){const e=this.m.get($nk(k));this.m.delete($nk(k));return e?e[1]:d}setdefault(k,d=null){if(!this.has(k))this.set(k,d);return this.get(k)}
+ update(o){for(const[k,v]of o.items())this.set(k,v)}clear(){this.m.clear()}copy(){return new PyDict(this.items())}__len__(){return this.m.size}*__iter__(){yield*this.keys()}}
+const $eq=(a,b)=>{if(a===b)return true;if(Array.isArray(a)&&Array.isArray(b))return a.length==b.length&&a.every((x,i)=>$eq(x,b[i]));return false};
+const $t=x=>{if(x==null||x===false||x===0||x==="")return false;if(Array.isArray(x))return x.length>0;if(x instanceof PyDict||x instanceof Set)return(x.size??x.__len__())>0;if(x&&x.__len__)return x.__len__()>0;return true};
+const $cmp=(a,b)=>{if(Array.isArray(a)&&Array.isArray(b)){for(let i=0;i<Math.min(a.length,b.length);i++){const c=$cmp(a[i],b[i]);if(c)return c}return a.length-b.length}return a<b?-1:a>b?1:0};
+const $idx=(o,k)=>{if(Array.isArray(o)||typeof o=="string"){if(k<0)k+=o.length;if(k>=o.length||k<0)throw new Error("IndexError");return o[k]}if(o instanceof PyDict){if(!o.has(k))throw new Error("KeyError "+k);return o.get(k)}return o[k]};
+const $set=(o,k,v)=>{if(Array.isArray(o)){if(k<0)k+=o.length;o[k]=v}else if(o instanceof PyDict)o.set(k,v);else o[k]=v};
+const $del=(o,k)=>{if(Array.isArray(o))o.splice(k<0?k+o.length:k,1);else if(o instanceof PyDict)o.pop(k)};
+const $slice=(o,a,b,s)=>{const n=o.length;if(a==null)a=0;else if(a<0)a=Math.max(0,a+n);if(b==null)b=n;else if(b<0)b+=n;const r=o.slice(a,b);return typeof o=="string"?r:r};
+const $in=(a,b)=>{if(Array.isArray(b))return b.some(x=>$eq(x,a));if(typeof b=="string")return b.includes(a);if(b instanceof PyDict||b instanceof Set)return b.has(a);return false};
+const $mod=(a,b)=>{if(typeof a=="string")return $fmt(a,b);return((a%b)+b)%b};
+const $fmt=(s,a)=>{a=Array.isArray(a)?a:[a];let i=0;return s.replace(/%([-+ 0#]*)(\d+)?(?:\.(\d+))?([sdifxXr%])/g,(m,f,w,p,c)=>{if(c=="%")return"%";let v=a[i++],r;
+ if(c=="d"||c=="i")r=String(Math.trunc(v));else if(c=="f")r=Number(v).toFixed(p==null?6:+p);else if(c=="x")r=Math.trunc(v).toString(16);else if(c=="X")r=Math.trunc(v).toString(16).toUpperCase();else r=$str(v);
+ if(w){const pad=f.includes("0")&&c!="s"?"0":" ";r=f.includes("-")?r.padEnd(+w):r.padStart(+w,pad)}return r})};
+const $add=(a,b)=>Array.isArray(a)?a.concat(b):a+b;const $mul=(a,b)=>{if(typeof a!="number"){[a,b]=[b,a]}if(Array.isArray(b)){let r=[];for(let i=0;i<a;i++)r=r.concat(b);return r}return b.repeat(Math.max(0,a))};
+const $iter=x=>{if(Array.isArray(x)||typeof x=="string")return x;if(x instanceof PyDict)return x.keys();if(x instanceof Set)return[...x];if(x&&x.__iter__)return x.__iter__();return x};
+const $list=x=>Array.from($iter(x));
+const len=x=>x.__len__?x.__len__():x.length??x.size,list=$list,tuple=$list;
+const str=x=>x===null?"None":x===true?"True":x===false?"False":Array.isArray(x)?"["+x.map(str).join(", ")+"]":String(x);const $str=str;
+const int=x=>typeof x=="string"?parseInt(x):Math.trunc(x),float=x=>Number(x),abs=Math.abs;
+const range=(a,b,s=1)=>{if(b===undefined){b=a;a=0}const r=[];if(s>0)for(let i=a;i<b;i+=s)r.push(i);else for(let i=a;i>b;i+=s)r.push(i);return r};
+const $kwsplit=a=>{const l=a[a.length-1];return l instanceof KW?[a.slice(0,-1),l.o]:[a,{}]};
+const $key=(f,o)=>o.key||(x=>x);
+const max=(...a)=>{const[p,o]=$kwsplit(a),it=p.length==1?$list(p[0]):p,k=$key(0,o);let b;for(const x of it)if(b===undefined||$cmp(k(x),k(b))>0)b=x;return b};
+const min=(...a)=>{const[p,o]=$kwsplit(a),it=p.length==1?$list(p[0]):p,k=$key(0,o);let b;for(const x of it)if(b===undefined||$cmp(k(x),k(b))<0)b=x;return b};
+const sum=(x,s=0)=>$list(x).reduce((a,b)=>a+b,s);
+const round=(x,n)=>{if(n==null){const r=Math.round(x);return Math.abs(x%1)==.5&&r%2?r-1:r}const m=10**n;return Math.round(x*m)/m};
+const sorted=(it,o)=>{o=o instanceof KW?o.o:{};const k=o.key||(x=>x),r=$list(it).sort((a,b)=>$cmp(k(a),k(b)));return o.reverse?r.reverse():r};
+const enumerate=(it,s=0)=>$list(it).map((x,i)=>[i+s,x]);const zip=(...a)=>{const l=a.map($list),n=Math.min(...l.map(x=>x.length));return Array.from({length:n},(_,i)=>l.map(x=>x[i]))};
+const reversed=x=>$list(x).reverse();const any=x=>$list(x).some($t),all=x=>$list(x).every($t);
+const next=(it,d)=>{if(it.__next__)return it.__next__();const r=it.next();return r.done?d:r.value};
+const $js={sort:Array.prototype.sort,pop:Array.prototype.pop};
+$d(Array.prototype,"append",function(x){this.push(x)});$d(Array.prototype,"extend",function(x){for(const y of $iter(x))this.push(y)});
+$d(Array.prototype,"insert",function(i,x){this.splice(i<0?Math.max(0,this.length+i):i,0,x)});
+$d(Array.prototype,"remove",function(x){const i=this.findIndex(y=>$eq(x,y));if(i<0)throw new Error("ValueError");this.splice(i,1)});
+$d(Array.prototype,"pop",function(i){if(i===undefined)return $js.pop.call(this);return this.splice(i<0?this.length+i:i,1)[0]});
+$d(Array.prototype,"clear",function(){this.length=0});$d(Array.prototype,"count",function(x){return this.filter(y=>$eq(x,y)).length});
+$d(Array.prototype,"index",function(x){const i=this.findIndex(y=>$eq(x,y));if(i<0)throw new Error("ValueError");return i});
+$d(Array.prototype,"copy",function(){return this.slice()});
+$d(Array.prototype,"sort",function(o){if(o instanceof KW){const k=o.o.key||(x=>x);$js.sort.call(this,(a,b)=>$cmp(k(a),k(b)));if(o.o.reverse)this.reverse();return}return $js.sort.call(this,o||$cmp)});
+for(const[n,f]of Object.entries({lower(){return this.toLowerCase()},upper(){return this.toUpperCase()},strip(){return this.trim()},startswith(s){return this.startsWith(s)},endswith(s){return this.endsWith(s)},isprintable(){return/^[\x20-\x7e\u00a0-\uffff]*$/.test(this)},join(it){return $list(it).map(str).join(this)},count(s){return this.split(s).length-1}}))$d(String.prototype,n,f);
+const math={sin:Math.sin,cos:Math.cos,tan:Math.tan,pi:Math.PI,ceil:Math.ceil,floor:Math.floor,sqrt:Math.sqrt,atan2:Math.atan2,hypot:Math.hypot,exp:Math.exp,log:Math.log};
+class Rnd{random(){return Math.random()}choice(a){a=$list(a);return a[Math.floor(Math.random()*a.length)]}uniform(a,b){return a+Math.random()*(b-a)}randint(a,b){return a+Math.floor(Math.random()*(b-a+1))}
+ shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
+ choices(p,o){o=o instanceof KW?o.o:{};p=$list(p);const w=o.weights||p.map(()=>1),k=o.k||1,t=w.reduce((a,b)=>a+b,0),r=[];for(let n=0;n<k;n++){let x=Math.random()*t,i=0;while(i<p.length-1&&(x-=w[i])>=0)i++;r.push(p[i])}return r}}
+const random=Object.assign(new Rnd(),{Random:Rnd});
+const time={perf_counter:()=>performance.now()/1000,time:()=>Date.now()/1000};
+const heapq={heappush(h,x){h.push(x);let i=h.length-1;while(i>0){const p=(i-1)>>1;if($cmp(h[i],h[p])>=0)break;[h[i],h[p]]=[h[p],h[i]];i=p}},
+ heappop(h){const t=h[0],l=$js.pop.call(h);if(h.length){h[0]=l;let i=0;for(;;){let a=2*i+1,b=a+1,m=i;if(a<h.length&&$cmp(h[a],h[m])<0)m=a;if(b<h.length&&$cmp(h[b],h[m])<0)m=b;if(m==i)break;[h[i],h[m]]=[h[m],h[i]];i=m}}return t},
+ heapify(h){const a=h.slice();h.length=0;for(const x of a)heapq.heappush(h,x)}};
+const itertools={count(s=0){let n=s;return{__next__:()=>n++}}};
+class deque{constructor(){this.a=[]}append(x){this.a.push(x)}popleft(){return this.a.shift()}clear(){this.a=[]}__len__(){return this.a.length}__iter__(){return this.a}}
+/* ---- Tk canvas stand-in ---- */
+class Cv{constructor(el,bg){this.el=el;this.bg=bg;this.ctx=el.getContext("2d");this.items=[];this.nid=1;this.h={};this.dirty=true;
+ const d=Math.min(2,window.devicePixelRatio||1);el.width=960*d;el.height=600*d;this.ctx.scale(d,d);
+ const pt=e=>{const r=el.getBoundingClientRect();return{x:(e.clientX-r.left)*960/r.width,y:(e.clientY-r.top)*600/r.height}};
+ el.addEventListener("pointerdown",e=>{e.preventDefault();try{navigator.vibrate&&navigator.vibrate(10)}catch(_){}this.h["<Button-1>"]&&this.h["<Button-1>"](pt(e))});
+ el.addEventListener("pointermove",e=>{this.h["<Motion>"]&&this.h["<Motion>"](pt(e))});
+ el.addEventListener("pointerleave",()=>{this.h["<Leave>"]&&this.h["<Leave>"]({})});
+ const loop=()=>{if(this.dirty){this.dirty=false;this.paint()}requestAnimationFrame(loop)};loop()}
+ pack(){}bind(e,f){this.h[e]=f}config(){}
+ add(type,a){let o={};const l=a[a.length-1];if(l instanceof KW){o=l.o;a=a.slice(0,-1)}a=a.flat(Infinity);let tg=o.tags;tg=tg==null?[]:typeof tg=="string"?[tg]:tg;const it={id:this.nid++,type,a,o,tg};this.items.push(it);this.dirty=true;return it.id}
+ create_rectangle(...a){return this.add("r",a)}create_oval(...a){return this.add("o",a)}create_line(...a){return this.add("l",a)}create_polygon(...a){return this.add("p",a)}create_text(...a){return this.add("t",a)}create_arc(...a){return this.add("a",a)}
+ sel(t){return typeof t=="number"?this.items.filter(i=>i.id==t):t=="all"?this.items:this.items.filter(i=>i.tg.includes(t))}
+ delete(t){const s=new Set(this.sel(t));this.items=this.items.filter(i=>!s.has(i));this.dirty=true}
+ find_withtag(t){return this.sel(t).map(i=>i.id)}
+ itemconfigure(t,...a){const l=a[a.length-1];for(const i of this.sel(t))Object.assign(i.o,l.o);this.dirty=true}
+ tag_lower(t,b){const s=this.sel(t),rest=this.items.filter(i=>!s.includes(i));let at=0;if(b!=null){const ref=this.sel(b)[0];at=ref?rest.indexOf(ref):0}this.items=[...rest.slice(0,at),...s,...rest.slice(at)];this.dirty=true}
+ paint(){const x=this.ctx;x.clearRect(0,0,960,600);x.fillStyle=this.bg;x.fillRect(0,0,960,600);
+  for(const i of this.items){const o=i.o,a=i.a;if(o.state==='hidden')continue;x.save();x.globalAlpha=({gray12:.12,gray25:.25,gray50:.5,gray75:.75})[o.stipple]||1;x.lineJoin="round";
+   const W=o.width==null?1:o.width,fl=(d)=>o.fill===undefined?d:o.fill,ol=(d)=>o.outline===undefined?d:o.outline;
+   const fs=(f,s)=>{if(f){x.fillStyle=f;x.fill()}if(s&&W>0){x.strokeStyle=s;x.lineWidth=W;if(o.dash)x.setLineDash($list(o.dash).map(v=>v*W));x.stroke()}};
+   if(i.type=="r"){x.beginPath();x.rect(a[0],a[1],a[2]-a[0],a[3]-a[1]);fs(fl(""),ol("black"))}
+   else if(i.type=="o"){x.beginPath();x.ellipse((a[0]+a[2])/2,(a[1]+a[3])/2,Math.abs(a[2]-a[0])/2,Math.abs(a[3]-a[1])/2,0,0,7);fs(fl(""),ol("black"))}
+   else if(i.type=="l"){x.beginPath();x.moveTo(a[0],a[1]);for(let k=2;k<a.length;k+=2)x.lineTo(a[k],a[k+1]);x.strokeStyle=fl("black");x.lineWidth=W;x.lineCap=o.capstyle=="round"?"round":o.capstyle=="projecting"?"square":"butt";if(o.dash)x.setLineDash($list(o.dash).map(v=>v*W));x.stroke();
+    if(o.arrow=="last"&&a.length>=4){const n=a.length,ang=Math.atan2(a[n-1]-a[n-3],a[n-2]-a[n-4]),L=8+W;x.beginPath();x.moveTo(a[n-2],a[n-1]);x.lineTo(a[n-2]-L*Math.cos(ang-.4),a[n-1]-L*Math.sin(ang-.4));x.lineTo(a[n-2]-L*Math.cos(ang+.4),a[n-1]-L*Math.sin(ang+.4));x.closePath();x.fillStyle=fl("black");x.fill()}}
+   else if(i.type=="p"){x.beginPath();x.moveTo(a[0],a[1]);for(let k=2;k<a.length;k+=2)x.lineTo(a[k],a[k+1]);x.closePath();fs(fl("black"),ol(""))}
+   else if(i.type=="a"){const cx=(a[0]+a[2])/2,cy=(a[1]+a[3])/2,st=o.start||0,ex=o.extent==null?90:o.extent;x.beginPath();if(o.style!="arc"&&o.style!="chord")x.moveTo(cx,cy);x.ellipse(cx,cy,Math.abs(a[2]-a[0])/2,Math.abs(a[3]-a[1])/2,0,-st*Math.PI/180,-(st+ex)*Math.PI/180,ex>0);if(o.style!="arc")x.closePath();fs(o.style=="arc"?"":fl(""),ol(o.style=="arc"?"black":"black"))}
+   else if(i.type=="t"){const f=o.font||["Arial",-12],px=f[1]<0?-f[1]:f[1]*96/72,an=o.anchor&&o.anchor!="center"?o.anchor:"";x.font=`${f[2]&&f[2].includes("bold")?"bold ":""}${px}px Arial, Helvetica, sans-serif`;x.fillStyle=fl("black");
+    x.textAlign=an.includes("w")?"left":an.includes("e")?"right":"center";x.textBaseline=an.includes("n")?"top":an.includes("s")?"bottom":"middle";x.translate(a[0],a[1]);if(o.angle)x.rotate(-o.angle*Math.PI/180);
+    const ls=String(o.text).split("\n");ls.forEach((l,k)=>x.fillText(l,0,(k-(an.includes("n")?0:an.includes("s")?ls.length-1:(ls.length-1)/2))*px*1.2))}
+   x.restore()}}}
+const tk={Tk:class{title(){}resizable(){}protocol(){}destroy(){}mainloop(){}bind(e,f){this.k=f}after(ms,f){return setTimeout(f,ms)}after_cancel(h){clearTimeout(h)}},Canvas:class extends Cv{constructor(r,k){super(document.getElementById('cv'),k.o.bg)}},LAST:"last",ARC:"arc",CHORD:"chord"};
+class Sound{constructor(){this.enabled=true;this.available=true;this.ac=null}
+ play(n){if(!this.enabled)return;try{this.ac=this.ac||new(window.AudioContext||window.webkitAudioContext)();let t=this.ac.currentTime;for(const[f,d]of(SOUND_TONES.get(n)||[])){const o=this.ac.createOscillator(),g=this.ac.createGain();o.type="square";o.frequency.value=f;g.gain.value=.04;o.connect(g);g.connect(this.ac.destination);o.start(t);o.stop(t+d/1000);t+=d/1000}}catch(e){}}}
+class ScoreBoard{constructor(){this.memory=[];try{this.memory=JSON.parse(localStorage.getItem("br_scores6")||"[]")}catch(e){}}
+ add(n,s,m,d,df,sv){this.memory.push([n,Math.trunc(s),m,Math.trunc(d),df,Math.trunc(sv),new Date().toISOString().slice(0,10)]);try{localStorage.setItem("br_scores6",JSON.stringify(this.memory))}catch(e){}}
+ top(l=10){return this.memory.slice().sort((a,b)=>b[1]-a[1]).slice(0,l)}best(){const r=this.top(1);return r.length?r[0][1]:0}}
+
+var SOUND_TONES = new PyDict([["click",[[900,25]]],["place",[[600,35]]],["ready",[[1200,70]]],["wrap",[[700,50],[950,70]]],["serve",[[900,70],[1300,110]]],["burn",[[220,260]]],["angry",[[320,140],[230,240]]],["vip",[[1000,60],[1400,60],[1800,90]]],["event",[[700,90],[900,90],[700,90]]],["dayend",[[800,100],[1000,100],[1200,180]]],["buy",[[1000,60],[1500,90]]],["no",[[250,120]]],["win",[[1000,100],[1200,100],[1500,100],[2000,240]]],["lose",[[500,180],[400,180],[300,380]]]]);
+var CAREER_DAYS, CHEF_LOOK, COMBO_BONUS, COMBO_CHANCE, COOK, DAY_GOALS, DAY_LENGTH, DIFFICULTY, EVENTS, HAIRS, MENU, PANTS, RECIPES, SHIRTS, SKINS, TARGETS, UPGRADES, WAITER_LOOK, _name, _spec, window;
+class Stack {
+  constructor(...a){ const P=Object.getPrototypeOf(this); for(const k of Object.getOwnPropertyNames(P)){const d=Object.getOwnPropertyDescriptor(P,k); if(k!=='constructor'&&typeof d.value==='function')this[k]=d.value.bind(this);} if(this.__init__) this.__init__(...a); }
+  __init__() {
+    this._items = [];
+  }
+  push(item) {
+    this._items.append(item);
+  }
+  pop() {
+    if ($t(this.is_empty())) {
+      return null;
+    }
+    return this._items.pop();
+  }
+  peek() {
+    if ($t(this.is_empty())) {
+      return null;
+    }
+    return $idx(this._items,(-1));
+  }
+  is_empty() {
+    return $eq(len(this._items),0);
+  }
+  size() {
+    return len(this._items);
+  }
+  clear() {
+    this._items.clear();
+  }
+  to_list() {
+    return list(this._items);
+  }
+}
+
+class Queue {
+  constructor(...a){ const P=Object.getPrototypeOf(this); for(const k of Object.getOwnPropertyNames(P)){const d=Object.getOwnPropertyDescriptor(P,k); if(k!=='constructor'&&typeof d.value==='function')this[k]=d.value.bind(this);} if(this.__init__) this.__init__(...a); }
+  __init__() {
+    this._items = new deque();
+  }
+  enqueue(item) {
+    this._items.append(item);
+  }
+  dequeue() {
+    if (!$t(this._items)) {
+      return null;
+    }
+    return this._items.popleft();
+  }
+  peek() {
+    if (!$t(this._items)) {
+      return null;
+    }
+    return $idx(this._items,0);
+  }
+  is_empty() {
+    return $eq(len(this._items),0);
+  }
+  size() {
+    return len(this._items);
+  }
+  clear() {
+    this._items.clear();
+  }
+}
+
+class CustomerLine {
+  constructor(...a){ const P=Object.getPrototypeOf(this); for(const k of Object.getOwnPropertyNames(P)){const d=Object.getOwnPropertyDescriptor(P,k); if(k!=='constructor'&&typeof d.value==='function')this[k]=d.value.bind(this);} if(this.__init__) this.__init__(...a); }
+  __init__() {
+    this._heap = [];
+    this._counter = itertools.count();
+  }
+  enqueue(customer) {
+    heapq.heappush(this._heap,[$idx(customer,"priority"),next(this._counter),customer]);
+  }
+  dequeue() {
+    if (!$t(this._heap)) {
+      return null;
+    }
+    return $idx(heapq.heappop(this._heap),2);
+  }
+  peek() {
+    if (!$t(this._heap)) {
+      return null;
+    }
+    return $idx($idx(this._heap,0),2);
+  }
+  remove(customer) {
+    this._heap = (()=>{const r=[];for(let e of $iter(this._heap)){if(($idx(e,2) !== customer)){r.push(e);}} return r;})();
+    heapq.heapify(this._heap);
+  }
+  to_list() {
+    return (()=>{const r=[];for(let e of $iter(sorted(this._heap,$kw({key:((e)=>[$idx(e,0),$idx(e,1)])})))){r.push($idx(e,2));} return r;})();
+  }
+  size() {
+    return len(this._heap);
+  }
+}
+
+class _Node {
+  constructor(...a){ const P=Object.getPrototypeOf(this); for(const k of Object.getOwnPropertyNames(P)){const d=Object.getOwnPropertyDescriptor(P,k); if(k!=='constructor'&&typeof d.value==='function')this[k]=d.value.bind(this);} if(this.__init__) this.__init__(...a); }
+  __init__(value) {
+    this.value = value;
+    this.next = null;
+  }
+}
+
+class OrderHistory {
+  constructor(...a){ const P=Object.getPrototypeOf(this); for(const k of Object.getOwnPropertyNames(P)){const d=Object.getOwnPropertyDescriptor(P,k); if(k!=='constructor'&&typeof d.value==='function')this[k]=d.value.bind(this);} if(this.__init__) this.__init__(...a); }
+  __init__() {
+    this.head = null;
+    this.tail = null;
+    this._size = 0;
+  }
+  append(value) {
+    let node;
+    node = new _Node(value);
+    if ((this.head == null)) {
+      this.head = node;
+      this.tail = node;
+    } else {
+      this.tail.next = node;
+      this.tail = node;
+    }
+    this._size = (this._size + 1);
+  }
+  __len__() {
+    return this._size;
+  }
+  *__iter__() {
+    let node;
+    node = this.head;
+    while ((node != null)) {
+      (yield node.value);
+      node = node.next;
+    }
+  }
+  last(n) {
+    let values;
+    values = list(this);
+    return ((n > 0)?$slice(values,(-n),undefined,undefined):[]);
+  }
+  count(outcome) {
+    let total, v;
+    total = 0;
+    for (v of $iter(this)) {
+      if ($eq($idx(v,"outcome"),outcome)) {
+        total = (total + 1);
+      }
+    }
+    return total;
+  }
+}
+
+MENU = new PyDict([["Classic Cheeseburger",new PyDict([["price",6],["desc","Beef, cheese, lettuce, tomato"],["day",1],["weight",3],["short","Classic"],["recipe",["Bun","Patty","Cheese","Lettuce","Tomato"]]])],["Double Cheeseburger",new PyDict([["price",9],["desc","Two beef patties, double cheese"],["day",1],["weight",1],["short","Double"],["recipe",["Bun","Patty","Cheese","Patty","Cheese"]]])],["French Fries",new PyDict([["price",3],["desc","Golden and crispy"],["day",1],["weight",0],["short","Fries"],["recipe",null]])],["Chicken Burger",new PyDict([["price",7],["desc","Crispy chicken, lettuce, tomato"],["day",1],["weight",2],["short","Chicken"],["recipe",["Bun","Chicken","Lettuce","Tomato"]]])],["Soft Drink",new PyDict([["price",2],["desc","Cold and fizzy"],["day",1],["weight",0],["short","Drink"],["recipe",null]])],["Chicken Cheese Burger",new PyDict([["price",8],["desc","Chicken, cheese, lettuce, tomato"],["day",2],["weight",2],["short","Chk+Cheese"],["recipe",["Bun","Chicken","Cheese","Lettuce","Tomato"]]])],["Mega Burger",new PyDict([["price",11],["desc","Two patties, cheese, lettuce, tomato"],["day",4],["weight",1],["short","Mega"],["recipe",["Bun","Patty","Cheese","Patty","Lettuce","Tomato"]]])],["Mixed Burger",new PyDict([["price",10],["desc","Beef and chicken together"],["day",6],["weight",1],["short","Mixed"],["recipe",["Bun","Patty","Cheese","Chicken","Lettuce"]]])]]);
+RECIPES = (()=>{const r=new PyDict();for(let [name,v] of $iter(MENU.items())){if($t($idx(v,"recipe"))){r.set(tuple($idx(v,"recipe")),name);}} return r;})();
+for ([_name,_spec] of $iter(MENU.items())) {
+  $set(_spec,"steps",($t($idx(_spec,"recipe"))?", ".join($idx(_spec,"recipe")):""));
+}
+$set($idx(MENU,"French Fries"),"steps","Fry potatoes (7 sec)");
+$set($idx(MENU,"Soft Drink"),"steps","Fill a cup (3 sec)");
+COOK = new PyDict([["Beef",new PyDict([["time",8.0],["burn",2.5]])],["Chicken",new PyDict([["time",9.0],["burn",2.5]])],["Bun",new PyDict([["time",4.0],["burn",3.0]])],["Fries",new PyDict([["time",7.0],["burn",2.5]])],["Drink",new PyDict([["time",3.0],["burn",null]])]]);
+DIFFICULTY = new PyDict([["Easy",new PyDict([["patience",75.0],["interval",20.0],["goal_mult",0.8]])],["Normal",new PyDict([["patience",60.0],["interval",16.0],["goal_mult",1.0]])],["Hard",new PyDict([["patience",50.0],["interval",12.0],["goal_mult",1.2]])]]);
+TARGETS = [100,150,250];
+CAREER_DAYS = 7;
+DAY_LENGTH = 100.0;
+DAY_GOALS = [25,35,45,55,65,75,90];
+COMBO_CHANCE = 0.15;
+COMBO_BONUS = 2;
+UPGRADES = new PyDict([["grill",new PyDict([["name","Hot Grill"],["desc","Patties and chicken cook 20% faster per level"],["cost",25],["max",3]])],["kitchen",new PyDict([["name","Turbo Kitchen"],["desc","Toaster, fryer and drinks 20% faster per level"],["cost",25],["max",3]])],["safety",new PyDict([["name","Fire Guard"],["desc","Food burns 25% later per level"],["cost",30],["max",3]])],["patience",new PyDict([["name","Comfy Seats"],["desc","Customers wait 12% longer per level"],["cost",30],["max",3]])],["waiter",new PyDict([["name","Waiter Skates"],["desc","The waiter walks 25% faster per level"],["cost",20],["max",3]])],["tips",new PyDict([["name","Tip Jar"],["desc","Tips are 50% bigger per level"],["cost",25],["max",3]])]]);
+EVENTS = new PyDict([["rush",["RUSH HOUR",18.0,"#e67e22","Rush hour! Customers arrive fast and pay 25% more!"]],["happy",["HAPPY HOUR",20.0,"#2e9e4f","Happy hour! All tips are doubled!"]],["flare",["GRILL FLARE-UP",14.0,"#c0392b","Flare-up! The grill is very hot - patties cook fast, watch them!"]],["oil",["COLD OIL",16.0,"#2a78c4","Cold oil! Fries cook much slower for a while."]]]);
+function F(px,bold=false) {
+  return ($t(bold)?["Arial",(-int(px)),"bold"]:["Arial",(-int(px))]);
+}
+function _rgb(h) {
+  return [int($slice(h,1,3,undefined),16),int($slice(h,3,5,undefined),16),int($slice(h,5,7,undefined),16)];
+}
+function mix(c1,c2,t) {
+  let a, b;
+  t = max(0.0,min(1.0,t));
+  {const $u1 = $list([_rgb(c1),_rgb(c2)]);
+    a = $u1[0];
+    b = $u1[1];
+  }
+  return $mod("#%02x%02x%02x",tuple((()=>{const r=[];for(let i of $iter(range(3))){r.push(int(($idx(a,i) + (($idx(b,i) - $idx(a,i)) * t))));} return r;})()));
+}
+function item_stage(it) {
+  let burn, p, spec, total;
+  spec = $idx(COOK,$idx(it,"kind"));
+  total = it.get("time",$idx(spec,"time"));
+  burn = it.get("burn",$idx(spec,"burn"));
+  p = ($idx(it,"t") / total);
+  if ((p < 1.0)) {
+    return ["cooking",p];
+  }
+  if (($t(burn) && (p >= burn))) {
+    return ["burnt",p];
+  }
+  return ["ready",p];
+}
+SKINS = ["#f5cba7","#e0ac69","#c68642","#8d5524"];
+HAIRS = ["#2c1b0e","#5a3825","#111111","#a0522d","#c9a227"];
+SHIRTS = ["#3b82f6","#10b981","#ef4444","#8b5cf6","#f97316","#ec4899","#14b8a6"];
+PANTS = ["#34495e","#2c3e50","#4a4a4a","#5d4037"];
+CHEF_LOOK = new PyDict([["kind","chef"],["skin","#f0c8a0"],["hair","#3a2a1a"],["hair_style",3],["shirt","#ffffff"],["pants","#3a3f4a"],["vip",false]]);
+WAITER_LOOK = new PyDict([["kind","waiter"],["skin","#e0ac80"],["hair","#222222"],["hair_style",4],["shirt","#f5f5f5"],["pants","#222222"],["vip",false]]);
+function random_look(rng,vip=false) {
+  return new PyDict([["kind","customer"],["skin",rng.choice(SKINS)],["hair",rng.choice(HAIRS)],["hair_style",rng.choice([0,0,1,2])],["shirt",($t(vip)?"#f1c40f":rng.choice(SHIRTS))],["pants",rng.choice(PANTS)],["vip",vip]]);
+}
+function draw_layer(c,name,x,yb,w,h,tag) {
+  let fx, fy, k, pts, r, step, sx, sy, x2, xx, y1;
+  y1 = (yb - h);
+  x2 = (x + w);
+  if ($eq(name,"Bun")) {
+    c.create_rectangle(x,(y1 + (h * 0.25)),x2,yb,$kw({fill:"#e0a24e",outline:"#8a5a1c",width:1,tags:tag}));
+  } else if ($eq(name,"TopBun")) {
+    c.create_arc(x,y1,x2,(y1 + (2 * h)),$kw({start:0,extent:180,fill:"#e0a24e",outline:"#8a5a1c",width:1,style:"chord",tags:tag}));
+    r = max(1.0,(h / 9.0));
+    for ([fx,fy] of $iter([[0.3,0.55],[0.5,0.3],[0.7,0.55],[0.4,0.75],[0.6,0.75]])) {
+      {const $u2 = $list([(x + (w * fx)),(y1 + (h * fy))]);
+        sx = $u2[0];
+        sy = $u2[1];
+      }
+      c.create_oval((sx - (r * 1.4)),(sy - (r * 0.8)),(sx + (r * 1.4)),(sy + (r * 0.8)),$kw({fill:"#fff3d6",outline:"",tags:tag}));
+    }
+  } else if ($eq(name,"Patty")) {
+    c.create_rectangle((x - (w * 0.02)),(y1 + (h * 0.12)),(x2 + (w * 0.02)),(yb - (h * 0.04)),$kw({fill:"#6b3a1e",outline:"#3e2010",width:1,tags:tag}));
+  } else if ($eq(name,"Chicken")) {
+    c.create_rectangle((x - (w * 0.02)),(y1 + (h * 0.1)),(x2 + (w * 0.02)),(yb - (h * 0.04)),$kw({fill:"#d9993f",outline:"#a8661a",width:1,tags:tag}));
+    for (fx of $iter([0.2,0.45,0.7])) {
+      sx = (x + (w * fx));
+      c.create_oval((sx - 1.5),(y1 + (h * 0.35)),(sx + 1.5),(y1 + (h * 0.5)),$kw({fill:"#f0c070",outline:"",tags:tag}));
+    }
+  } else if ($eq(name,"Cheese")) {
+    pts = [[(x - (w * 0.04)),(y1 + (h * 0.3))],[(x2 + (w * 0.04)),(y1 + (h * 0.3))],[(x2 + (w * 0.04)),(y1 + (h * 0.7))],[(x2 - (w * 0.14)),(y1 + (h * 0.7))],[(x2 - (w * 0.2)),yb],[(x2 - (w * 0.26)),(y1 + (h * 0.7))],[(x - (w * 0.04)),(y1 + (h * 0.7))]];
+    c.create_polygon(pts,$kw({fill:"#ffd23f",outline:"#c9a000",width:1,tags:tag}));
+  } else if ($eq(name,"Lettuce")) {
+    pts = [[(x - (w * 0.05)),(yb - (h * 0.1))]];
+    step = max(3.0,(w / 9.0));
+    {const $u3 = $list([(x - (w * 0.05)),0]);
+      xx = $u3[0];
+      k = $u3[1];
+    }
+    while ((xx <= (x2 + (w * 0.05)))) {
+      pts.append([xx,(y1 + ($eq($mod(k,2),0)?(h * 0.15):(h * 0.5)))]);
+      xx = (xx + step);
+      k = (k + 1);
+    }
+    pts.append([(x2 + (w * 0.05)),(yb - (h * 0.1))]);
+    c.create_polygon(pts,$kw({fill:"#5cb85c",outline:"#2e7d32",width:1,tags:tag}));
+  } else if ($eq(name,"Tomato")) {
+    c.create_oval((x + (w * 0.06)),(y1 + (h * 0.15)),(x2 - (w * 0.06)),(yb - (h * 0.05)),$kw({fill:"#e0453a",outline:"#a02020",width:1,tags:tag}));
+  }
+}
+function draw_burger(c,cx,yb,w,layers,h,tag) {
+  let name, y;
+  y = yb;
+  for (name of $iter(layers)) {
+    draw_layer(c,name,(cx - (w / 2.0)),y,w,h,tag);
+    y = (y - h);
+  }
+}
+function draw_item_icon(c,name,cx,cy,s,tag) {
+  let h, i, layers, spec, top, total, x;
+  spec = MENU.get(name);
+  if (($t(spec) && $t($idx(spec,"recipe")))) {
+    layers = $add($idx(spec,"recipe"),["TopBun"]);
+    h = (5.0 * s);
+    total = (h * len(layers));
+    draw_burger(c,cx,(cy + (total / 2.0)),(36 * s),layers,h,tag);
+  } else if ($eq(name,"French Fries")) {
+    for (i of $iter(range((-3),4))) {
+      x = (cx + ((i * 4.2) * s));
+      top = (cy - ((17 + ($mod(i,3) * 3)) * s));
+      c.create_rectangle((x - (1.7 * s)),top,(x + (1.7 * s)),(cy + (2 * s)),$kw({fill:"#f4c430",outline:"#c99a10",tags:tag}));
+    }
+    c.create_polygon([[(cx - (13 * s)),(cy - (2 * s))],[(cx + (13 * s)),(cy - (2 * s))],[(cx + (10 * s)),(cy + (15 * s))],[(cx - (10 * s)),(cy + (15 * s))]],$kw({fill:"#d62828",outline:"#7a0f0f",tags:tag}));
+    c.create_oval((cx - (4 * s)),(cy + (3 * s)),(cx + (4 * s)),(cy + (11 * s)),$kw({fill:"#ffe066",outline:"",tags:tag}));
+  } else if ($eq(name,"Soft Drink")) {
+    c.create_line((cx + (2 * s)),(cy - (9 * s)),(cx + (6 * s)),(cy - (19 * s)),$kw({fill:"#2a9d8f",width:max(1,(2 * s)),tags:tag}));
+    c.create_polygon([[(cx - (9 * s)),(cy - (8 * s))],[(cx + (9 * s)),(cy - (8 * s))],[(cx + (7 * s)),(cy + (15 * s))],[(cx - (7 * s)),(cy + (15 * s))]],$kw({fill:"#ffffff",outline:"#888888",tags:tag}));
+    c.create_polygon([[(cx - (8 * s)),cy],[(cx + (8 * s)),cy],[(cx + (7.4 * s)),(cy + (8 * s))],[(cx - (7.4 * s)),(cy + (8 * s))]],$kw({fill:"#d62828",outline:"",tags:tag}));
+    c.create_rectangle((cx - (10 * s)),(cy - (11 * s)),(cx + (10 * s)),(cy - (8 * s)),$kw({fill:"#d62828",outline:"#7a0f0f",tags:tag}));
+  }
+}
+function draw_person(c,x,fy,look,anim,tag="dyn",s=0.72) {
+  let bob, bot, bw, bx, by, ex, foot_x, hair, hip_x, hx, hy, i, ink, ix, kind, mood, n, name, pants, ph, sg, sh_x, sh_y, shirt, skin, sleeve, style, swing, top, tray, up, walking;
+  kind = $idx(look,"kind");
+  walking = anim.get("walking",false);
+  ph = anim.get("phase",0.0);
+  swing = ($t(walking)?(math.sin(ph) * 7.0):0.0);
+  bob = ($t(walking)?(abs(math.sin(ph)) * 1.6):0.0);
+  mood = anim.get("mood","neutral");
+  {const $u4 = $list([$idx(look,"skin"),$idx(look,"shirt"),$idx(look,"pants"),$idx(look,"hair")]);
+    skin = $u4[0];
+    shirt = $u4[1];
+    pants = $u4[2];
+    hair = $u4[3];
+  }
+  ink = "#2b2b2b";
+  const X = (dx) => {
+    return (x + (dx * s));
+  };
+  const Y = (dy) => {
+    return ((fy + (dy * s)) - bob);
+  };
+  for (sg of $iter([(-1),1])) {
+    hip_x = X((sg * 7));
+    foot_x = X(((sg * 7) + (swing * sg)));
+    c.create_line(hip_x,Y((-36)),foot_x,(fy - (4 * s)),$kw({width:max(2,(11 * s)),fill:pants,capstyle:"round",tags:tag}));
+    c.create_oval((foot_x - (7 * s)),(fy - (7 * s)),(foot_x + (8 * s)),fy,$kw({fill:"#1f1f1f",outline:"",tags:tag}));
+  }
+  {const $u5 = $list([Y((-86)),Y((-34))]);
+    top = $u5[0];
+    bot = $u5[1];
+  }
+  c.create_rectangle(X((-19)),top,X(19),bot,$kw({fill:shirt,outline:ink,width:1,tags:tag}));
+  c.create_oval(X((-21)),(top - (3 * s)),X(21),(top + (14 * s)),$kw({fill:shirt,outline:ink,width:1,tags:tag}));
+  if ($eq(kind,"customer")) {
+    c.create_polygon([[X((-7)),Y((-88))],[X(0),Y((-76))],[X(7),Y((-88))]],$kw({fill:skin,outline:ink,tags:tag}));
+    for (by of $iter([(-68),(-58),(-48)])) {
+      c.create_oval(X((-1.5)),(Y(by) - 1.5),X(1.5),(Y(by) + 1.5),$kw({fill:"#333333",outline:"",tags:tag}));
+    }
+  } else if ($eq(kind,"chef")) {
+    for (bx of $iter([(-6),6])) {
+      for (by of $iter([(-72),(-60),(-48)])) {
+        c.create_oval((X(bx) - 2),(Y(by) - 2),(X(bx) + 2),(Y(by) + 2),$kw({fill:"#9aa5ad",outline:"",tags:tag}));
+      }
+    }
+    c.create_polygon([[X((-9)),Y((-88))],[X(0),Y((-74))],[X(9),Y((-88))]],$kw({fill:"#c0392b",outline:ink,tags:tag}));
+  } else if ($eq(kind,"waiter")) {
+    c.create_rectangle(X((-19)),Y((-84)),X((-3)),Y((-36)),$kw({fill:"#222222",outline:"",tags:tag}));
+    c.create_rectangle(X(3),Y((-84)),X(19),Y((-36)),$kw({fill:"#222222",outline:"",tags:tag}));
+    c.create_polygon([[X(0),Y((-84))],[X((-7)),Y((-90))],[X((-7)),Y((-78))]],$kw({fill:"#c0392b",outline:"",tags:tag}));
+    c.create_polygon([[X(0),Y((-84))],[X(7),Y((-90))],[X(7),Y((-78))]],$kw({fill:"#c0392b",outline:"",tags:tag}));
+  }
+  sleeve = shirt;
+  tray = anim.get("tray");
+  for (sg of $iter([(-1),1])) {
+    {const $u6 = $list([X((sg * 21)),Y((-80))]);
+      sh_x = $u6[0];
+      sh_y = $u6[1];
+    }
+    {const $u7 = $list([X(((sg * 26) - ((swing * sg) * 0.7))),Y((-46))]);
+      hx = $u7[0];
+      hy = $u7[1];
+    }
+    up = anim.get("arm_up",0.0);
+    if (($eq(sg,1) && (up > 0))) {
+      {const $u8 = $list([X(31),Y(((-46) - (58 * up)))]);
+        hx = $u8[0];
+        hy = $u8[1];
+      }
+    }
+    if ((tray != null)) {
+      {const $u9 = $list([X((sg * 15)),Y((-58))]);
+        hx = $u9[0];
+        hy = $u9[1];
+      }
+    }
+    c.create_line(sh_x,sh_y,hx,hy,$kw({width:max(2,(9 * s)),fill:sleeve,capstyle:"round",tags:tag}));
+    c.create_oval((hx - (4.5 * s)),(hy - (4.5 * s)),(hx + (4.5 * s)),(hy + (4.5 * s)),$kw({fill:skin,outline:"",tags:tag}));
+  }
+  c.create_rectangle(X((-5)),Y((-92)),X(5),Y((-84)),$kw({fill:skin,outline:"",tags:tag}));
+  c.create_oval(X((-19)),Y((-112)),X((-14)),Y((-101)),$kw({fill:skin,outline:ink,tags:tag}));
+  c.create_oval(X(14),Y((-112)),X(19),Y((-101)),$kw({fill:skin,outline:ink,tags:tag}));
+  c.create_oval(X((-16)),Y((-126)),X(16),Y((-90)),$kw({fill:skin,outline:ink,width:1,tags:tag}));
+  style = $idx(look,"hair_style");
+  if ($in(style,[0,1])) {
+    c.create_arc(X((-17)),Y((-132)),X(17),Y((-100)),$kw({start:0,extent:180,fill:hair,outline:hair,style:"chord",tags:tag}));
+  }
+  if ($eq(style,1)) {
+    c.create_polygon([[X((-18)),Y((-120))],[X((-12)),Y((-120))],[X((-12)),Y((-86))],[X((-22)),Y((-84))]],$kw({fill:hair,outline:"",tags:tag}));
+    c.create_polygon([[X(18),Y((-120))],[X(12),Y((-120))],[X(12),Y((-86))],[X(22),Y((-84))]],$kw({fill:hair,outline:"",tags:tag}));
+  } else if ($eq(style,3)) {
+    c.create_oval(X((-19)),Y((-168)),X(1),Y((-142)),$kw({fill:"#ffffff",outline:"#bbbbbb",tags:tag}));
+    c.create_oval(X((-3)),Y((-168)),X(19),Y((-142)),$kw({fill:"#ffffff",outline:"#bbbbbb",tags:tag}));
+    c.create_oval(X((-12)),Y((-172)),X(12),Y((-146)),$kw({fill:"#ffffff",outline:"#bbbbbb",tags:tag}));
+    c.create_rectangle(X((-15)),Y((-150)),X(15),Y((-126)),$kw({fill:"#ffffff",outline:"#bbbbbb",tags:tag}));
+    c.create_rectangle(X((-16)),Y((-132)),X(16),Y((-126)),$kw({fill:"#dddddd",outline:"#bbbbbb",tags:tag}));
+  } else if ($eq(style,4)) {
+    c.create_rectangle(X((-14)),Y((-138)),X(14),Y((-126)),$kw({fill:"#222222",outline:"",tags:tag}));
+    c.create_rectangle(X((-17)),Y((-128)),X(17),Y((-124)),$kw({fill:"#111111",outline:"",tags:tag}));
+  }
+  if ($t(look.get("vip"))) {
+    c.create_polygon([[X((-14)),Y((-130))],[X((-14)),Y((-146))],[X((-7)),Y((-138))],[X(0),Y((-150))],[X(7),Y((-138))],[X(14),Y((-146))],[X(14),Y((-130))]],$kw({fill:"#ffd700",outline:"#b8860b",tags:tag}));
+  }
+  for (ex of $iter([(-6),6])) {
+    c.create_oval(X((ex - 3.5)),Y((-112)),X((ex + 3.5)),Y((-105)),$kw({fill:"#ffffff",outline:ink,tags:tag}));
+    c.create_oval(X((ex - 1.6)),Y((-110.5)),X((ex + 1.6)),Y((-106.5)),$kw({fill:"#222222",outline:"",tags:tag}));
+  }
+  bw = max(1,(1.6 * s));
+  if ($eq(mood,"angry")) {
+    c.create_line(X((-11)),Y((-118)),X((-3)),Y((-114)),$kw({fill:ink,width:bw,tags:tag}));
+    c.create_line(X(3),Y((-114)),X(11),Y((-118)),$kw({fill:ink,width:bw,tags:tag}));
+  } else if ($eq(mood,"worried")) {
+    c.create_line(X((-11)),Y((-114)),X((-3)),Y((-118)),$kw({fill:ink,width:bw,tags:tag}));
+    c.create_line(X(3),Y((-118)),X(11),Y((-114)),$kw({fill:ink,width:bw,tags:tag}));
+  } else {
+    c.create_line(X((-11)),Y((-117)),X((-3)),Y((-117)),$kw({fill:ink,width:bw,tags:tag}));
+    c.create_line(X(3),Y((-117)),X(11),Y((-117)),$kw({fill:ink,width:bw,tags:tag}));
+  }
+  c.create_line(X(0),Y((-108)),X(1.5),Y((-100)),$kw({fill:"#a06a4a",width:bw,tags:tag}));
+  if ($eq(mood,"happy")) {
+    c.create_arc(X((-8)),Y((-103)),X(8),Y((-91)),$kw({start:200,extent:140,style:"arc",outline:"#5a1a1a",width:max(1,(2 * s)),tags:tag}));
+    for (bx of $iter([(-11),11])) {
+      c.create_oval(X((bx - 3)),Y((-101)),X((bx + 3)),Y((-97)),$kw({fill:"#f5a3a3",outline:"",tags:tag}));
+    }
+  } else if ($eq(mood,"angry")) {
+    c.create_arc(X((-8)),Y((-97)),X(8),Y((-87)),$kw({start:20,extent:140,style:"arc",outline:"#5a1a1a",width:max(1,(2 * s)),tags:tag}));
+  } else if ($eq(mood,"worried")) {
+    c.create_line(X((-6)),Y((-94)),X(6),Y((-96)),$kw({fill:"#5a1a1a",width:max(1,(2 * s)),tags:tag}));
+  } else {
+    c.create_line(X((-6)),Y((-95)),X(6),Y((-95)),$kw({fill:"#5a1a1a",width:max(1,(2 * s)),tags:tag}));
+  }
+  if ((tray != null)) {
+    c.create_rectangle(X((-30)),Y((-62)),X(30),Y((-57)),$kw({fill:"#c7ced4",outline:"#6b747b",tags:tag}));
+    n = len(tray);
+    for ([i,name] of $iter(enumerate($slice(tray,undefined,4,undefined)))) {
+      ix = X(((i - ((min(n,4) - 1) / 2.0)) * 22));
+      draw_item_icon(c,name,ix,Y((-77)),0.55,tag);
+    }
+  }
+}
+class BurgerRush {
+  constructor(...a){ const P=Object.getPrototypeOf(this); for(const k of Object.getOwnPropertyNames(P)){const d=Object.getOwnPropertyDescriptor(P,k); if(k!=='constructor'&&typeof d.value==='function')this[k]=d.value.bind(this);} if(this.__init__) this.__init__(...a); }
+  __init__(root) {
+    this.root = root;
+    root.title("Burger Rush v6");
+    root.resizable(false,false);
+    this.canvas = new tk.Canvas(root,$kw({width:this.W,height:this.H,highlightthickness:0,bg:"#2d1e1a"}));
+    this.canvas.pack();
+    this.rng = new random.Random();
+    this.settings = new PyDict([["difficulty","Normal"],["target",150],["mode","career"]]);
+    this.snd = new Sound();
+    this.scores = new ScoreBoard();
+    this.last_name = "Player";
+    this.name_buf = "Player";
+    this.end_outcome = "gameover";
+    this._menu_shown = null;
+    this.end_top = [];
+    this.score_rows = [];
+    this.state = "menu";
+    this.mouse = [(-1),(-1)];
+    this.hits = [];
+    this.flash = null;
+    this.flash_t = 0.0;
+    this.cursor = "";
+    this.menu_visible = true;
+    this.closing = false;
+    this.dt = 0.0;
+    this.reset_game();
+    this.draw_static();
+    this.draw_menu_static();
+    this.canvas.bind("<Button-1>",this.on_click);
+    this.canvas.bind("<Motion>",this.on_motion);
+    this.canvas.bind("<Leave>",this.on_leave);
+    root.bind("<Key>",this.on_key);
+    root.protocol("WM_DELETE_WINDOW",this.close);
+    this.last = time.perf_counter();
+    this._job = this.root.after(this.FRAME_MS,this.loop);
+  }
+  close() {
+    this.closing = true;
+    try {
+      this.root.after_cancel(this._job);
+    } catch($e) {
+      ;
+    }
+    this.root.destroy();
+  }
+  loop() {
+    let now;
+    if ($t(this.closing)) {
+      return ;
+    }
+    now = time.perf_counter();
+    this.dt = min(0.1,(now - this.last));
+    this.last = now;
+    this.msg_t = max(0.0,(this.msg_t - this.dt));
+    if ($eq(this.state,"playing")) {
+      this.update(this.dt);
+    }
+    this.render();
+    this._job = this.root.after(this.FRAME_MS,this.loop);
+  }
+  on_motion(event) {
+    this.mouse = [event.x,event.y];
+  }
+  on_leave(event) {
+    this.mouse = [(-1),(-1)];
+  }
+  on_click(event) {
+    let action, glow, slop, x1, x2, y1, y2;
+    for (slop of $iter([0,12])) {
+      for ([x1,y1,x2,y2,action,glow] of $iter(reversed(this.hits))) {
+        if (((((x1 - slop) <= event.x) && (event.x <= (x2 + slop))) && (((y1 - slop) <= event.y) && (event.y <= (y2 + slop))))) {
+          this.flash = [x1,y1,x2,y2];
+          this.flash_t = 0.15;
+          if (!$eq(this.state,"playing")) {
+            this.snd.play("click");
+          }
+          action();
+          return ;
+        }
+      }
+    }
+  }
+  on_key(event) {
+    let key;
+    key = event.keysym;
+    if ($eq(this.state,"entername")) {
+      if ($in(key,["Return","KP_Enter"])) {
+        this.save_name();
+      } else if ($eq(key,"BackSpace")) {
+        this.name_buf = $slice(this.name_buf,undefined,(-1),undefined);
+      } else if (($t(event.char) && $t(event.char.isprintable()) && (len(this.name_buf) < 12))) {
+        this.name_buf = (this.name_buf + event.char);
+      }
+      return ;
+    }
+    if (($eq(key,"Escape") || $eq(key.lower(),"p"))) {
+      this.toggle_pause();
+    } else if ($eq(key.lower(),"m")) {
+      this.toggle_sound();
+    }
+  }
+  toggle_sound() {
+    this.snd.enabled = !$t(this.snd.enabled);
+    if ($t(this.snd.enabled)) {
+      this.snd.play("ready");
+    }
+    if ($in(this.state,["playing","paused"])) {
+      this.say($mod("Sound %s.",($t(this.snd.enabled)?"ON":"OFF")));
+    }
+  }
+  career() {
+    return $eq($idx(this.settings,"mode"),"career");
+  }
+  ev(kind) {
+    return ((this.event != null) && $eq($idx(this.event,"kind"),kind));
+  }
+  reset_game() {
+    this.clock = 0.0;
+    this.score = 0;
+    this.cash = 0;
+    this.served = 0;
+    this.missed = 0;
+    this.lives = this.START_LIVES;
+    this.next_id = 1;
+    this.spawned = 0;
+    this.day = 1;
+    this.last_day = null;
+    this.upg = (()=>{const r=new PyDict();for(let key of $iter(UPGRADES)){r.set(key,0);} return r;})();
+    this.history = new OrderHistory();
+    this.msg = "";
+    this.msg_t = 0.0;
+    this.msg_color = "#ffe9c7";
+    this.reset_day_state();
+  }
+  reset_day_state() {
+    this.customers = [];
+    this.spawn_timer = 1.0;
+    this.board = new CustomerLine();
+    this.jobs = new Queue();
+    this.plate = new Stack();
+    this.redo = new Stack();
+    this.shelf = [];
+    this.rack = [];
+    this.grill = $mul([null],3);
+    this.toaster = $mul([null],2);
+    this.fryer = $mul([null],2);
+    this.drinks = $mul([null],2);
+    this.staff = new PyDict([["x",this.WAITER_HOME],["state","idle"],["t",0.0],["job",null],["phase",0.0],["items",null],["walking",false]]);
+    this.flyers = [];
+    this.popups = [];
+    this.day_time = DAY_LENGTH;
+    this.day_earned = 0;
+    this.day_served = 0;
+    this.day_missed = 0;
+    this.day_goal = this.goal_for_day();
+    this.event = null;
+    this.event_timer = (30.0 + (this.rng.random() * 20.0));
+  }
+  goal_for_day() {
+    let base;
+    base = $idx(DAY_GOALS,(min(this.day,len(DAY_GOALS)) - 1));
+    return int(round((base * $idx($idx(DIFFICULTY,$idx(this.settings,"difficulty")),"goal_mult"))));
+  }
+  day_patience() {
+    let base;
+    base = $idx($idx(DIFFICULTY,$idx(this.settings,"difficulty")),"patience");
+    if ($t(this.career())) {
+      base = max(30.0,(base - (2.5 * (this.day - 1))));
+    }
+    return (base * (1.0 + (0.12 * $idx(this.upg,"patience"))));
+  }
+  day_interval() {
+    let base;
+    base = $idx($idx(DIFFICULTY,$idx(this.settings,"difficulty")),"interval");
+    if ($t(this.career())) {
+      base = max(7.0,(base - (1.2 * (this.day - 1))));
+    }
+    return base;
+  }
+  speed_for(kind) {
+    if ($in(kind,["Beef","Chicken"])) {
+      return (1.0 + (0.2 * $idx(this.upg,"grill")));
+    }
+    return (1.0 + (0.2 * $idx(this.upg,"kitchen")));
+  }
+  available_dishes() {
+    let day;
+    day = ($t(this.career())?this.day:1);
+    return (()=>{const r=[];for(let [name,spec] of $iter(MENU.items())){if(($idx(spec,"day") <= day)){r.push(name);}} return r;})();
+  }
+  available_burgers() {
+    return (()=>{const r=[];for(let name of $iter(this.available_dishes())){if($t($idx($idx(MENU,name),"recipe"))){r.push(name);}} return r;})();
+  }
+  start_game() {
+    this.reset_game();
+    this.flash = null;
+    this.state = "playing";
+    if ($t(this.career())) {
+      this.say($mod("Day 1 - goal $%d. Customers are arriving!",this.day_goal));
+    } else {
+      this.say("Customers are arriving! Read the orders on the right.");
+    }
+  }
+  go_menu() {
+    this.reset_game();
+    this.state = "menu";
+  }
+  pause() {
+    if ($eq(this.state,"playing")) {
+      this.state = "paused";
+    }
+  }
+  resume() {
+    if ($eq(this.state,"paused")) {
+      this.state = "playing";
+    }
+  }
+  toggle_pause() {
+    if ($eq(this.state,"playing")) {
+      this.state = "paused";
+    } else if ($eq(this.state,"paused")) {
+      this.state = "playing";
+    }
+  }
+  set_state(name) {
+    this.state = name;
+  }
+  say(text,mood="normal") {
+    this.msg = text;
+    this.msg_t = 4.0;
+    this.msg_color = new PyDict([["good","#b6ffb0"],["bad","#ffb3b3"]]).get(mood,"#ffe9c7");
+  }
+  finish(outcome) {
+    this.end_outcome = outcome;
+    this.snd.play(($eq(outcome,"complete")?"win":"lose"));
+    if ((this.score > 0)) {
+      this.name_buf = this.last_name;
+      this.state = "entername";
+    } else {
+      this.end_top = this.scores.top(5);
+      this.state = outcome;
+    }
+  }
+  open_scores() {
+    this.score_rows = this.scores.top(10);
+    this.state = "scores";
+  }
+  save_name() {
+    let mode, name;
+    name = (this.name_buf.strip() || "Player");
+    this.last_name = name;
+    mode = ($t(this.career())?"Career":"Quick");
+    this.scores.add(name,this.score,mode,($t(this.career())?this.day:0),$idx(this.settings,"difficulty"),this.served);
+    this.end_top = this.scores.top(5);
+    this.state = this.end_outcome;
+  }
+  record(cu,outcome,money) {
+    this.history.append(new PyDict([["id",$idx(cu,"id")],["items",list($idx(cu,"items"))],["outcome",outcome],["money",money],["vip",$idx(cu,"vip")]]));
+  }
+  end_day() {
+    let earned, goal, met, ratio, stars;
+    {const $u10 = $list([this.day_earned,this.day_goal]);
+      earned = $u10[0];
+      goal = $u10[1];
+    }
+    ratio = (earned / float(max(1,goal)));
+    stars = ((ratio >= 1.5)?3:((ratio >= 1.0)?2:((ratio >= 0.7)?1:0)));
+    met = (earned >= goal);
+    if (!$t(met)) {
+      this.lives = (this.lives - 1);
+    }
+    this.last_day = new PyDict([["day",this.day],["earned",earned],["goal",goal],["served",this.day_served],["missed",this.day_missed],["stars",stars],["met",met]]);
+    this.customers = [];
+    this.board = new CustomerLine();
+    this.event = null;
+    this.state = "daysummary";
+    this.snd.play("dayend");
+  }
+  after_summary() {
+    if ((this.lives <= 0)) {
+      this.finish("gameover");
+    } else if ((this.day >= CAREER_DAYS)) {
+      this.finish("complete");
+    } else {
+      this.state = "shop";
+    }
+  }
+  next_day() {
+    this.day = (this.day + 1);
+    this.reset_day_state();
+    this.state = "playing";
+    this.say($mod("Day %d - goal $%d. Good luck!",[this.day,this.day_goal]),"good");
+  }
+  buy(key) {
+    let cost, level, u;
+    u = $idx(UPGRADES,key);
+    level = $idx(this.upg,key);
+    if ((level >= $idx(u,"max"))) {
+      return ;
+    }
+    cost = ($idx(u,"cost") * (level + 1));
+    if ((this.cash < cost)) {
+      this.say($mod("Not enough cash for %s!",$idx(u,"name")),"bad");
+      this.snd.play("no");
+      return ;
+    }
+    this.cash = (this.cash - cost);
+    $set(this.upg,key,(level + 1));
+    this.say($mod("Bought %s (level %d)!",[$idx(u,"name"),(level + 1)]),"good");
+    this.snd.play("buy");
+  }
+  update_event(dt) {
+    let color, kind, message, name, secs;
+    if ((this.event != null)) {
+      $set(this.event,"t",($idx(this.event,"t") - dt));
+      if (($idx(this.event,"t") <= 0)) {
+        this.event = null;
+        this.event_timer = (35.0 + (this.rng.random() * 25.0));
+      }
+      return ;
+    }
+    this.event_timer = (this.event_timer - dt);
+    if ((this.event_timer <= 0)) {
+      kind = this.rng.choice(list(EVENTS));
+      {const $u11 = $list($idx(EVENTS,kind));
+        name = $u11[0];
+        secs = $u11[1];
+        color = $u11[2];
+        message = $u11[3];
+      }
+      this.event = new PyDict([["kind",kind],["t",secs],["dur",secs]]);
+      this.say(message,($in(kind,["flare","oil"])?"bad":"good"));
+      this.snd.play("event");
+    }
+  }
+  update(dt) {
+    this.clock = (this.clock + dt);
+    this.update_event(dt);
+    this.update_stations(dt);
+    this.update_customers(dt);
+    this.update_staff(dt);
+    this.update_effects(dt);
+    this.maybe_spawn(dt);
+    if ((this.lives <= 0)) {
+      this.finish("gameover");
+    } else if ($t(this.career())) {
+      this.day_time = (this.day_time - dt);
+      if ((this.day_time <= 0)) {
+        this.end_day();
+      }
+    } else if ((this.score >= $idx(this.settings,"target"))) {
+      this.finish("complete");
+    }
+  }
+  update_stations(dt) {
+    let group, groups, it, mult, name;
+    groups = [["grill",this.grill],["toaster",this.toaster],["fryer",this.fryer],["drinks",this.drinks]];
+    for ([name,group] of $iter(groups)) {
+      mult = 1.0;
+      if (($eq(name,"grill") && $t(this.ev("flare")))) {
+        mult = 1.8;
+      } else if (($eq(name,"fryer") && $t(this.ev("oil")))) {
+        mult = 0.55;
+      }
+      for (it of $iter(group)) {
+        if ((it != null)) {
+          $set(it,"t",($idx(it,"t") + (dt * mult)));
+          if ((!$t(it.get("noted")) && $eq($idx(item_stage(it),0),"burnt"))) {
+            $set(it,"noted",true);
+            this.snd.play("burn");
+          }
+        }
+      }
+    }
+  }
+  free_slot() {
+    let i, used;
+    used = (()=>{const r=new Set();for(let cu of $iter(this.customers)){if(($idx(cu,"slot") != null)){r.add($idx(cu,"slot"));}} return r;})();
+    for (i of $iter(range(len(this.SLOT_X)))) {
+      if (!$in(i,used)) {
+        return i;
+      }
+    }
+    return null;
+  }
+  maybe_spawn(dt) {
+    let slot;
+    this.spawn_timer = (this.spawn_timer - dt);
+    if ((this.spawn_timer > 0)) {
+      return ;
+    }
+    slot = this.free_slot();
+    if (((len(this.customers) >= 3) || (slot == null))) {
+      this.spawn_timer = 0.5;
+      return ;
+    }
+    this.spawn(slot);
+    if ($t(this.ev("rush"))) {
+      this.spawn_timer = (2.0 + (this.rng.random() * 2.0));
+    } else {
+      this.spawn_timer = (this.day_interval() + (this.rng.random() * 4.0));
+    }
+  }
+  spawn(slot) {
+    let cu, vip;
+    this.spawned = (this.spawned + 1);
+    vip = ((this.spawned > 2) && (this.rng.random() < this.VIP_CHANCE));
+    cu = new PyDict([["id",this.next_id],["slot",slot],["home_x",$idx(this.SLOT_X,slot)],["x",float(this.DOOR_X)],["y",float(this.LANE_BACK)],["state","entering"],["timer",0.0],["vip",vip],["combo",false],["priority",($t(vip)?0:1)],["look",random_look(this.rng,vip)],["mood","neutral"],["items",[]],["price",0],["patience",0.0],["max_patience",1.0],["phase",(this.rng.random() * 6.0)],["gone",false]]);
+    this.next_id = (this.next_id + 1);
+    this.customers.append(cu);
+  }
+  make_order() {
+    let burger, burgers, r;
+    if ((this.spawned <= 1)) {
+      return ["Classic Cheeseburger"];
+    }
+    burgers = this.available_burgers();
+    burger = $idx(this.rng.choices(burgers,$kw({weights:(()=>{const r=[];for(let b of $iter(burgers)){r.push($idx($idx(MENU,b),"weight"));} return r;})()})),0);
+    r = this.rng.random();
+    if ((r < COMBO_CHANCE)) {
+      return [burger,"French Fries","Soft Drink"];
+    }
+    if ((r < 0.55)) {
+      return [burger];
+    }
+    if ((r < 0.72)) {
+      return [burger,"French Fries"];
+    }
+    if ((r < 0.87)) {
+      return [burger,"Soft Drink"];
+    }
+    return ["French Fries","Soft Drink"];
+  }
+  place_order(cu) {
+    let patience, price;
+    $set(cu,"items",this.make_order());
+    price = sum((()=>{const r=[];for(let i of $iter($idx(cu,"items"))){r.push($idx($idx(MENU,i),"price"));} return r;})());
+    if ($eq(len($idx(cu,"items")),3)) {
+      $set(cu,"combo",true);
+      price = (price + COMBO_BONUS);
+    }
+    if ($t(this.ev("rush"))) {
+      price = int(round((price * 1.25)));
+    }
+    patience = this.day_patience();
+    if ($t($idx(cu,"vip"))) {
+      price = int(round((price * this.VIP_PRICE_MULT)));
+      patience = (patience * this.VIP_PATIENCE_MULT);
+    }
+    $set(cu,"price",price);
+    $set(cu,"max_patience",patience);
+    $set(cu,"patience",patience);
+    $set(cu,"state","waiting");
+    this.board.enqueue(cu);
+    if ($t($idx(cu,"vip"))) {
+      this.snd.play("vip");
+      this.say($mod("VIP order from customer #%d!",$idx(cu,"id")),"bad");
+    } else {
+      this.say($mod("%s from customer #%d!",[($t($idx(cu,"combo"))?"Combo order":"New order"),$idx(cu,"id")]));
+    }
+  }
+  depth_y(cu) {
+    let d;
+    d = abs(($idx(cu,"x") - $idx(cu,"home_x")));
+    return (this.LANE_BACK + ((this.LANE_FRONT - this.LANE_BACK) * (1.0 - (min(d,50.0) / 50.0))));
+  }
+  update_customers(dt) {
+    let cu, dx, moving, ratio, speed, st, step;
+    for (cu of $iter(this.customers)) {
+      st = $idx(cu,"state");
+      moving = false;
+      if ($eq(st,"entering")) {
+        step = (this.CUSTOMER_IN_SPEED * dt);
+        dx = ($idx(cu,"home_x") - $idx(cu,"x"));
+        if ((abs(dx) <= step)) {
+          $set(cu,"x",float($idx(cu,"home_x")));
+          $set(cu,"state","ordering");
+          $set(cu,"timer",1.8);
+        } else {
+          $set(cu,"x",($idx(cu,"x") + ((dx > 0)?step:(-step))));
+          moving = true;
+        }
+        $set(cu,"y",this.depth_y(cu));
+      } else if ($eq(st,"ordering")) {
+        $set(cu,"timer",($idx(cu,"timer") - dt));
+        if (($idx(cu,"timer") <= 0)) {
+          this.place_order(cu);
+        }
+      } else if ($eq(st,"waiting")) {
+        $set(cu,"patience",($idx(cu,"patience") - dt));
+        ratio = ($idx(cu,"patience") / $idx(cu,"max_patience"));
+        $set(cu,"mood",((ratio < 0.35)?"worried":"neutral"));
+        if (($idx(cu,"patience") <= 0)) {
+          this.customer_angry(cu);
+        }
+      } else if ($eq(st,"happy")) {
+        $set(cu,"timer",($idx(cu,"timer") - dt));
+        if (($idx(cu,"timer") <= 0)) {
+          $set(cu,"state","leaving");
+          $set(cu,"slot",null);
+        }
+      } else if ($in(st,["leaving","angry"])) {
+        speed = ($eq(st,"angry")?170.0:125.0);
+        $set(cu,"x",($idx(cu,"x") - (speed * dt)));
+        $set(cu,"y",this.depth_y(cu));
+        moving = true;
+        if (($idx(cu,"x") <= this.DOOR_X)) {
+          $set(cu,"gone",true);
+        }
+      }
+      if ($t(moving)) {
+        $set(cu,"phase",($idx(cu,"phase") + (dt * 11.0)));
+      }
+    }
+    this.customers = (()=>{const r=[];for(let cu of $iter(this.customers)){if(!$t($idx(cu,"gone"))){r.push(cu);}} return r;})();
+  }
+  customer_angry(cu) {
+    $set(cu,"state","angry");
+    $set(cu,"mood","angry");
+    $set(cu,"slot",null);
+    this.board.remove(cu);
+    this.lives = (this.lives - 1);
+    this.missed = (this.missed + 1);
+    this.day_missed = (this.day_missed + 1);
+    this.record(cu,"lost",0);
+    this.snd.play("angry");
+    this.say($mod("Customer #%d left angry! Life lost.",$idx(cu,"id")),"bad");
+  }
+  shelf_pos(i) {
+    return [((436 + (i * 49)) + 23),515];
+  }
+  rack_pos(i) {
+    return [((436 + (i * 49)) + 23),570];
+  }
+  try_serve(cu) {
+    let have, i, it, missing, positions, sh;
+    if ((!$eq(this.state,"playing") || !$eq($idx(cu,"state"),"waiting"))) {
+      return ;
+    }
+    have = list(this.shelf);
+    missing = [];
+    for (it of $iter($idx(cu,"items"))) {
+      if ($in(it,have)) {
+        have.remove(it);
+      } else {
+        missing.append(it);
+      }
+    }
+    if ($t(missing)) {
+      this.say($mod("Order #%d needs: %s",[$idx(cu,"id"),", ".join(missing)]),"bad");
+      return ;
+    }
+    sh = list(this.shelf);
+    positions = [];
+    for (it of $iter($idx(cu,"items"))) {
+      i = sh.index(it);
+      positions.append(this.shelf_pos(i));
+      $set(sh,i,null);
+    }
+    this.shelf = (()=>{const r=[];for(let x of $iter(sh)){if((x != null)){r.push(x);}} return r;})();
+    $set(cu,"state","delivering");
+    this.jobs.enqueue(new PyDict([["cust",cu],["items",list($idx(cu,"items"))],["from",positions]]));
+    this.say($mod("Waiter is taking order #%d to the customer.",$idx(cu,"id")));
+  }
+  update_staff(dt) {
+    let job, name, pos, st, target;
+    st = this.staff;
+    $set(st,"walking",false);
+    if ($eq($idx(st,"state"),"idle")) {
+      job = this.jobs.dequeue();
+      if ($t(job)) {
+        $set(st,"job",job);
+        $set(st,"state","collect");
+        $set(st,"t",0.0);
+        for ([name,pos] of $iter(zip($idx(job,"items"),$idx(job,"from")))) {
+          this.flyers.append(new PyDict([["name",name],["from",pos],["t",0.0],["dur",0.6]]));
+        }
+      }
+    } else if ($eq($idx(st,"state"),"collect")) {
+      $set(st,"t",($idx(st,"t") + dt));
+      if (($idx(st,"t") >= 0.6)) {
+        $set(st,"items",list($idx($idx(st,"job"),"items")));
+        $set(st,"state","walk");
+      }
+    } else if ($eq($idx(st,"state"),"walk")) {
+      target = $idx($idx($idx(st,"job"),"cust"),"home_x");
+      if ($t(this.move_staff(target,dt))) {
+        $set(st,"state","hand");
+        $set(st,"t",0.0);
+      }
+    } else if ($eq($idx(st,"state"),"hand")) {
+      $set(st,"t",($idx(st,"t") + dt));
+      if (($idx(st,"t") >= 0.8)) {
+        this.complete_order($idx(st,"job"));
+        $set(st,"items",null);
+        $set(st,"job",null);
+        $set(st,"state","return");
+      }
+    } else if ($eq($idx(st,"state"),"return")) {
+      if ($t(this.move_staff(this.WAITER_HOME,dt))) {
+        $set(st,"state","idle");
+      }
+    }
+  }
+  move_staff(target,dt) {
+    let dx, st, step;
+    st = this.staff;
+    step = ((this.WAITER_SPEED * (1.0 + (0.25 * $idx(this.upg,"waiter")))) * dt);
+    dx = (target - $idx(st,"x"));
+    if ((abs(dx) <= step)) {
+      $set(st,"x",float(target));
+      return true;
+    }
+    $set(st,"x",($idx(st,"x") + ((dx > 0)?step:(-step))));
+    $set(st,"walking",true);
+    $set(st,"phase",($idx(st,"phase") + (dt * 12.0)));
+    return false;
+  }
+  complete_order(job) {
+    let cu, gain, rate, ratio, tip;
+    cu = $idx(job,"cust");
+    ratio = max(0.0,($idx(cu,"patience") / $idx(cu,"max_patience")));
+    rate = (this.TIP_RATE * (1.0 + (0.5 * $idx(this.upg,"tips"))));
+    if ($t(this.ev("happy"))) {
+      rate = (rate * 2.0);
+    }
+    tip = int(round((($idx(cu,"price") * rate) * ratio)));
+    gain = ($idx(cu,"price") + tip);
+    this.score = (this.score + gain);
+    this.cash = (this.cash + gain);
+    this.day_earned = (this.day_earned + gain);
+    this.served = (this.served + 1);
+    this.day_served = (this.day_served + 1);
+    this.record(cu,"served",gain);
+    this.snd.play("serve");
+    this.board.remove(cu);
+    $set(cu,"state","happy");
+    $set(cu,"mood","happy");
+    $set(cu,"timer",1.4);
+    this.popups.append(new PyDict([["x",$idx(cu,"x")],["y",120.0],["text",$mod("+$%d",gain)],["t",0.0]]));
+    this.say($mod("Order #%d served!  +$%d (tip $%d)",[$idx(cu,"id"),gain,tip]),"good");
+  }
+  update_effects(dt) {
+    let f, p;
+    for (f of $iter(this.flyers)) {
+      $set(f,"t",($idx(f,"t") + dt));
+    }
+    this.flyers = (()=>{const r=[];for(let f of $iter(this.flyers)){if(($idx(f,"t") < $idx(f,"dur"))){r.push(f);}} return r;})();
+    for (p of $iter(this.popups)) {
+      $set(p,"t",($idx(p,"t") + dt));
+      $set(p,"y",($idx(p,"y") - (28.0 * dt)));
+    }
+    this.popups = (()=>{const r=[];for(let p of $iter(this.popups)){if(($idx(p,"t") < 1.3)){r.push(p);}} return r;})();
+  }
+  use_bin(kind) {
+    if (!$eq(this.state,"playing")) {
+      return ;
+    }
+    if ($in(kind,["Beef","Chicken"])) {
+      this.place_on(this.grill,kind,"The grill is full!");
+    } else if ($eq(kind,"Bun")) {
+      this.place_on(this.toaster,"Bun","The toaster is full!");
+    } else if ($eq(kind,"Fries")) {
+      this.place_on(this.fryer,"Fries","The fryer is full!");
+    } else if ($eq(kind,"Drink")) {
+      this.place_on(this.drinks,"Drink","Both cups are already filling!");
+    } else if ((this.plate.size() >= this.PLATE_MAX)) {
+      this.say("The plate is full! Wrap, undo or discard.","bad");
+    } else {
+      this.flush_redo();
+      this.plate.push(kind);
+      this.snd.play("place");
+      this.say($mod("Added %s to the burger.",kind.lower()));
+    }
+  }
+  place_on(slots,kind,full_msg) {
+    let i, s, safe, spec;
+    for ([i,s] of $iter(enumerate(slots))) {
+      if ((s == null)) {
+        spec = $idx(COOK,kind);
+        safe = (1.0 + (0.25 * $idx(this.upg,"safety")));
+        $set(slots,i,new PyDict([["kind",kind],["t",0.0],["time",($idx(spec,"time") / this.speed_for(kind))],["burn",($t($idx(spec,"burn"))?($idx(spec,"burn") * safe):null)]]));
+        this.snd.play("place");
+        this.say($idx(new PyDict([["Beef","Beef patty is on the grill."],["Chicken","Chicken is on the grill."],["Bun","Bun is in the toaster."],["Fries","Fries are in the fryer."],["Drink","Cup is filling up."]]),kind));
+        return ;
+      }
+    }
+    this.say(full_msg,"bad");
+  }
+  use_slot(slots,i) {
+    let dish, it, kind, left, name, p, stage;
+    if (!$eq(this.state,"playing")) {
+      return ;
+    }
+    it = $idx(slots,i);
+    if ((it == null)) {
+      this.say("Empty. Pick food from the bins below.");
+      return ;
+    }
+    {const $u12 = $list(item_stage(it));
+      stage = $u12[0];
+      p = $u12[1];
+    }
+    if ($eq(stage,"cooking")) {
+      left = int(math.ceil((it.get("time",$idx($idx(COOK,$idx(it,"kind")),"time")) - $idx(it,"t"))));
+      this.say($mod("Still cooking... %d s left.",left));
+      return ;
+    }
+    if ($eq(stage,"burnt")) {
+      $set(slots,i,null);
+      this.say("Burnt! It went in the bin.","bad");
+      return ;
+    }
+    kind = $idx(it,"kind");
+    if ($in(kind,["Beef","Chicken","Bun"])) {
+      if ((len(this.rack) >= this.RACK_MAX)) {
+        this.say("The warming rack is full!","bad");
+        return ;
+      }
+      name = $idx(new PyDict([["Beef","Patty"],["Chicken","Chicken"],["Bun","Bun"]]),kind);
+      this.rack.append(name);
+      $set(slots,i,null);
+      this.snd.play("ready");
+      this.say($mod("%s is on the warming rack. It stays safe.",name),"good");
+    } else {
+      dish = ($eq(kind,"Fries")?"French Fries":"Soft Drink");
+      if ((len(this.shelf) >= this.SHELF_MAX)) {
+        this.say("The serving shelf is full!","bad");
+        return ;
+      }
+      this.shelf.append(dish);
+      $set(slots,i,null);
+      this.snd.play("ready");
+      this.say($mod("%s is ready on the shelf.",dish),"good");
+    }
+  }
+  use_rack(i) {
+    let name;
+    if ((!$eq(this.state,"playing") || (i >= len(this.rack)))) {
+      return ;
+    }
+    if ((this.plate.size() >= this.PLATE_MAX)) {
+      this.say("The plate is full! Wrap, undo or trash.","bad");
+      return ;
+    }
+    name = this.rack.pop(i);
+    this.flush_redo();
+    this.plate.push(name);
+    this.snd.play("place");
+    if ($eq(name,"Bun")) {
+      this.say("Bun on plate. Its top half joins on WRAP.");
+    } else {
+      this.say($mod("%s added to the burger.",name));
+    }
+  }
+  wrap_burger() {
+    let layers, name;
+    if (!$eq(this.state,"playing")) {
+      return ;
+    }
+    layers = this.plate.to_list();
+    if (!$t(layers)) {
+      this.say("The plate is empty.");
+      return ;
+    }
+    name = RECIPES.get(tuple(layers));
+    if (((name == null) || !$in(name,this.available_dishes()))) {
+      this.say("That is not on the menu! Undo or discard.","bad");
+    } else if ((len(this.shelf) >= this.SHELF_MAX)) {
+      this.say("The serving shelf is full!","bad");
+    } else {
+      this.shelf.append(name);
+      this.plate.clear();
+      this.flush_redo();
+      this.snd.play("wrap");
+      this.say($mod("%s is ready on the shelf.",name),"good");
+    }
+  }
+  undo_plate() {
+    let removed;
+    if (!$eq(this.state,"playing")) {
+      return ;
+    }
+    removed = this.plate.pop();
+    if ((removed == null)) {
+      this.say("Nothing to undo.");
+      return ;
+    }
+    this.redo.push(removed);
+    this.snd.play("place");
+    this.say($mod("Set aside %s. Press REDO to put it back.",removed.lower()));
+  }
+  redo_plate() {
+    let item;
+    if (!$eq(this.state,"playing")) {
+      return ;
+    }
+    if ($t(this.redo.is_empty())) {
+      this.say("Nothing to redo.");
+    } else if ((this.plate.size() >= this.PLATE_MAX)) {
+      this.say("The plate is full!","bad");
+    } else {
+      item = this.redo.pop();
+      this.plate.push(item);
+      this.snd.play("place");
+      this.say($mod("Put %s back on the burger.",item.lower()));
+    }
+  }
+  flush_redo() {
+    let item;
+    while (!$t(this.redo.is_empty())) {
+      item = this.redo.pop();
+      if (($in(item,["Patty","Chicken","Bun"]) && (len(this.rack) < this.RACK_MAX))) {
+        this.rack.append(item);
+      }
+    }
+  }
+  discard_plate() {
+    if (!$eq(this.state,"playing")) {
+      return ;
+    }
+    this.plate.clear();
+    this.flush_redo();
+    this.say("Plate cleared.");
+  }
+  draw_static() {
+    let W, c, col, cx, cy, dx, dy, i, kind, label, r, shade, sx, sy, t, x, x1, x2, y, y1, y2;
+    c = this.canvas;
+    t = "static";
+    W = this.PLAY_W;
+    c.create_rectangle(0,0,this.W,34,$kw({fill:"#b8322a",outline:"",tags:t}));
+    c.create_rectangle(0,32,this.W,34,$kw({fill:"#7a1f16",outline:"",tags:t}));
+    c.create_rectangle(0,34,W,120,$kw({fill:"#f6e3c4",outline:"",tags:t}));
+    c.create_rectangle(0,100,W,120,$kw({fill:"#c0392b",outline:"",tags:t}));
+    c.create_rectangle(0,98,W,101,$kw({fill:"#7a1f16",outline:"",tags:t}));
+    c.create_rectangle(0,120,W,190,$kw({fill:"#caa472",outline:"",tags:t}));
+    for (x of $iter(range(0,W,74))) {
+      c.create_line(x,120,x,190,$kw({fill:"#b8915c",tags:t}));
+    }
+    for (y of $iter([140,160])) {
+      c.create_line(0,y,W,y,$kw({fill:"#bb9660",tags:t}));
+    }
+    c.create_rectangle(6,48,70,190,$kw({fill:"#6b4423",outline:"#3e2810",width:2,tags:t}));
+    c.create_rectangle(12,54,64,170,$kw({fill:"#bfe3f2",outline:"#3e2810",width:2,tags:t}));
+    c.create_line(38,54,38,170,$kw({fill:"#3e2810",width:2,tags:t}));
+    c.create_oval(48,114,56,122,$kw({fill:"#d4af37",outline:"#8a6d1a",tags:t}));
+    c.create_rectangle(16,176,60,188,$kw({fill:"#ffffff",outline:"#3e2810",tags:t}));
+    c.create_text(38,182,$kw({text:"OPEN",font:F(9,true),fill:"#c0392b",tags:t}));
+    c.create_rectangle(100,50,190,96,$kw({fill:"#bfe3f2",outline:"#6b4423",width:3,tags:t}));
+    c.create_line(145,50,145,96,$kw({fill:"#6b4423",width:2,tags:t}));
+    c.create_rectangle(650,46,730,92,$kw({fill:"#fff8e1",outline:"#6b4423",width:3,tags:t}));
+    draw_item_icon(c,"Classic Cheeseburger",690,69,0.8,t);
+    c.create_rectangle(704,164,726,190,$kw({fill:"#a0522d",outline:"#5a2e12",tags:t}));
+    for ([dx,dy] of $iter([[(-10),(-18)],[0,(-28)],[10,(-18)],[(-4),(-10)],[6,(-10)]])) {
+      c.create_oval(((715 + dx) - 8),((160 + dy) - 12),((715 + dx) + 8),((160 + dy) + 12),$kw({fill:"#3f9b4a",outline:"#1f6a2a",tags:t}));
+    }
+    c.create_rectangle(0,190,W,203,$kw({fill:"#e3c08d",outline:"#8b5a2b",tags:t}));
+    c.create_rectangle(0,203,W,216,$kw({fill:"#8b5a2b",outline:"#5c3a15",tags:t}));
+    c.create_text(480,210,$kw({text:"SERVING COUNTER",font:F(8,true),fill:"#f6e3c4",tags:t}));
+    for (r of $iter(range(3))) {
+      for (col of $iter(range(21))) {
+        shade = ($eq($mod((r + col),2),0)?"#e9eef1":"#dde6ea");
+        c.create_rectangle((col * 37),(216 + (r * 33)),((col * 37) + 37),(249 + (r * 33)),$kw({fill:shade,outline:"#c5d6de",tags:t}));
+      }
+    }
+    c.create_rectangle(0,316,W,422,$kw({fill:"#eef3f5",outline:"",tags:t}));
+    for (y of $iter(range(326,422,20))) {
+      c.create_line(0,y,W,y,$kw({fill:"#d5e0e5",tags:t}));
+    }
+    c.create_rectangle(14,322,254,414,$kw({fill:"#5b2f26",outline:"#2a120d",width:2,tags:t}));
+    c.create_rectangle(14,318,254,336,$kw({fill:"#8e979f",outline:"#1c1e21",width:2,tags:t}));
+    c.create_text(134,327,$kw({text:"GRILL",font:F(10,true),fill:"#1c1e21",tags:t}));
+    for (x of $iter(range(24,250,10))) {
+      c.create_line(x,342,x,408,$kw({fill:"#ff7b3a",tags:t}));
+    }
+    c.create_rectangle(270,322,390,414,$kw({fill:"#b8c4cc",outline:"#5d6a73",width:2,tags:t}));
+    c.create_rectangle(270,318,390,336,$kw({fill:"#dfe6ea",outline:"#5d6a73",width:2,tags:t}));
+    c.create_text(330,327,$kw({text:"BUN TOASTER",font:F(10,true),fill:"#3b4750",tags:t}));
+    for ([cx,cy] of $iter(this.TOASTER_SLOTS)) {
+      c.create_rectangle((cx - 19),(cy - 28),(cx + 19),(cy + 24),$kw({fill:"#2f3a40",outline:"#1c262b",width:2,tags:t}));
+    }
+    c.create_rectangle(392,346,400,384,$kw({fill:"#555555",outline:"#222222",tags:t}));
+    c.create_rectangle(408,322,546,414,$kw({fill:"#9aa5ad",outline:"#5d6a73",width:2,tags:t}));
+    c.create_rectangle(408,318,546,336,$kw({fill:"#c6ced4",outline:"#5d6a73",width:2,tags:t}));
+    c.create_text(477,327,$kw({text:"FRYER",font:F(10,true),fill:"#3b4750",tags:t}));
+    for ([cx,cy] of $iter(this.FRYER_SLOTS)) {
+      c.create_rectangle((cx - 27),(cy - 26),(cx + 27),(cy + 22),$kw({fill:"#d9a920",outline:"#6b5200",width:2,tags:t}));
+    }
+    c.create_rectangle(556,322,724,414,$kw({fill:"#c0392b",outline:"#7a1f16",width:2,tags:t}));
+    c.create_rectangle(556,318,724,336,$kw({fill:"#8e1f14",outline:"#7a1f16",width:2,tags:t}));
+    c.create_text(640,327,$kw({text:"DRINK DISPENSER",font:F(10,true),fill:"#ffe9c7",tags:t}));
+    for ([cx,cy] of $iter(this.DRINK_SLOTS)) {
+      c.create_rectangle((cx - 8),338,(cx + 8),350,$kw({fill:"#9aa5ad",outline:"#444444",tags:t}));
+      c.create_rectangle((cx - 30),402,(cx + 30),412,$kw({fill:"#3a3a3a",outline:"",tags:t}));
+    }
+    c.create_rectangle(566,340,584,396,$kw({fill:"#fff4df",outline:"#7a1f16",tags:t}));
+    c.create_text(575,368,$kw({text:"SODA",font:F(8,true),fill:"#c0392b",angle:90,tags:t}));
+    c.create_rectangle(0,420,W,476,$kw({fill:"#b88652",outline:"#6b4423",width:2,tags:t}));
+    c.create_rectangle(0,420,W,426,$kw({fill:"#d4a76e",outline:"",tags:t}));
+    c.create_text(238,447,$kw({text:"PREP COUNTER",font:F(10,true),fill:"#f6e3c4",tags:t}));
+    c.create_rectangle(0,478,424,this.H,$kw({fill:"#8b5a2b",outline:"#5c3a15",width:2,tags:t}));
+    c.create_rectangle(0,478,424,484,$kw({fill:"#b07a3f",outline:"",tags:t}));
+    c.create_text(14,490,$kw({anchor:"w",text:"ASSEMBLY COUNTER",font:F(9,true),fill:"#f6e3c4",tags:t}));
+    c.create_oval(276,580,404,598,$kw({fill:"#ffffff",outline:"#999999",width:2,tags:t}));
+    c.create_oval(290,583,390,594,$kw({fill:"#eeeeee",outline:"",tags:t}));
+    for ([kind,x1,y1,x2,y2,label] of $iter(this.BINS)) {
+      this.draw_bin(kind,x1,y1,x2,y2,label);
+    }
+    c.create_rectangle(430,478,W,538,$kw({fill:"#cfd6db",outline:"#6b747b",width:2,tags:t}));
+    c.create_text(440,487,$kw({anchor:"w",text:"READY TO SERVE (serving shelf)",font:F(9,true),fill:"#3b4750",tags:t}));
+    c.create_rectangle(430,538,W,(this.H - 2),$kw({fill:"#e9d8b6",outline:"#8a6d3b",width:2,tags:t}));
+    c.create_text(440,545,$kw({anchor:"w",text:"WARMING RACK (cooked food waits here)",font:F(9,true),fill:"#6b4a1e",tags:t}));
+    for (i of $iter(range(this.SHELF_MAX))) {
+      {const $u13 = $list(this.shelf_pos(i));
+        sx = $u13[0];
+        sy = $u13[1];
+      }
+      c.create_rectangle((sx - 23),(sy - 19),(sx + 23),(sy + 19),$kw({fill:"#eef2f4",outline:"#9aa5ad",tags:t}));
+    }
+    for (i of $iter(range(this.RACK_MAX))) {
+      {const $u14 = $list(this.rack_pos(i));
+        sx = $u14[0];
+        sy = $u14[1];
+      }
+      c.create_rectangle((sx - 23),(sy - 17),(sx + 23),(sy + 17),$kw({fill:"#fbf3e0",outline:"#a58a55",tags:t}));
+    }
+    c.create_rectangle(W,34,this.W,this.H,$kw({fill:"#2d1e1a",outline:"",tags:t}));
+    c.create_rectangle(W,34,this.W,56,$kw({fill:"#b8322a",outline:"",tags:t}));
+    c.create_text((W + 110),45,$kw({text:"MENU (build bottom to top)",font:F(12,true),fill:"#fff4df",tags:t}));
+    this.draw_menu_panel();
+    c.create_rectangle(W,322,this.W,344,$kw({fill:"#2a9d8f",outline:"",tags:t}));
+    c.create_text((W + 110),333,$kw({text:"ORDERS (VIPs jump the queue)",font:F(11,true),fill:"#ffffff",tags:t}));
+  }
+  draw_menu_panel() {
+    let W, c, compact, dishes, n, name, rowh, spec, t, y;
+    c = this.canvas;
+    t = "menupanel";
+    W = this.PLAY_W;
+    dishes = this.available_dishes();
+    this._menu_shown = tuple(dishes);
+    n = len(dishes);
+    rowh = min(52,int((260 / n)));
+    compact = (rowh < 48);
+    y = 58;
+    for (name of $iter(dishes)) {
+      spec = $idx(MENU,name);
+      c.create_rectangle((W + 6),y,(this.W - 6),((y + rowh) - 2),$kw({fill:"#fff4df",outline:"#a0792c",tags:t}));
+      if ($t(compact)) {
+        draw_item_icon(c,name,(W + 22),((y + (rowh / 2.0)) - 1),0.5,t);
+        c.create_text((W + 40),(y + 8),$kw({anchor:"w",text:name,font:F(10,true),fill:"#2d1e1a",tags:t}));
+        c.create_text((this.W - 12),(y + 8),$kw({anchor:"e",text:$mod("$%d",$idx(spec,"price")),font:F(12,true),fill:"#c0392b",tags:t}));
+        c.create_text((W + 40),(y + 17),$kw({anchor:"nw",text:$idx(spec,"steps"),width:170,font:F(8),fill:"#4a3a2a",tags:t}));
+      } else {
+        draw_item_icon(c,name,(W + 28),((y + (rowh / 2.0)) - 1),0.8,t);
+        c.create_text((W + 50),(y + 11),$kw({anchor:"w",text:name,font:F(11,true),fill:"#2d1e1a",tags:t}));
+        c.create_text((this.W - 12),(y + 11),$kw({anchor:"e",text:$mod("$%d",$idx(spec,"price")),font:F(13,true),fill:"#c0392b",tags:t}));
+        c.create_text((W + 50),(y + 22),$kw({anchor:"nw",text:$idx(spec,"steps"),width:160,font:F(10),fill:"#4a3a2a",tags:t}));
+      }
+      y = (y + rowh);
+    }
+    if ($t(c.find_withtag("menubg"))) {
+      c.tag_lower("menupanel","menubg");
+    }
+  }
+  sync_menu_panel() {
+    if (!$eq(tuple(this.available_dishes()),this._menu_shown)) {
+      this.canvas.delete("menupanel");
+      this.draw_menu_panel();
+    }
+  }
+  draw_bin(kind,x1,y1,x2,y2,label) {
+    let c, cx, cy, dx, t;
+    c = this.canvas;
+    t = "static";
+    c.create_rectangle(x1,y1,x2,y2,$kw({fill:"#f7f3ea",outline:"#5c3a15",width:2,tags:t}));
+    cx = ((x1 + x2) / 2.0);
+    cy = (y1 + ((y2 - y1) * 0.38));
+    if ($eq(kind,"Beef")) {
+      c.create_oval((cx - 20),(cy - 4),(cx + 20),(cy + 10),$kw({fill:"#d97a8c",outline:"#8a3a4a",tags:t}));
+      c.create_oval((cx - 18),(cy - 10),(cx + 18),(cy + 4),$kw({fill:"#e58a9a",outline:"#8a3a4a",tags:t}));
+    } else if ($eq(kind,"Chicken")) {
+      c.create_oval((cx - 20),(cy - 8),(cx + 20),(cy + 8),$kw({fill:"#f2c9a0",outline:"#a8661a",tags:t}));
+      for (dx of $iter([(-10),0,10])) {
+        c.create_oval(((cx + dx) - 2),(cy - 2),((cx + dx) + 2),(cy + 2),$kw({fill:"#e0a060",outline:"",tags:t}));
+      }
+    } else if ($eq(kind,"Bun")) {
+      draw_burger(c,cx,(cy + 10),38,["Bun","TopBun"],10,t);
+    } else if ($eq(kind,"Fries")) {
+      draw_item_icon(c,"French Fries",cx,(cy + 2),0.85,t);
+    } else if ($eq(kind,"Drink")) {
+      draw_item_icon(c,"Soft Drink",cx,(cy + 2),0.85,t);
+    } else if ($eq(kind,"Cheese")) {
+      draw_layer(c,"Cheese",(cx - 22),(cy + 8),44,16,t);
+    } else if ($eq(kind,"Lettuce")) {
+      draw_layer(c,"Lettuce",(cx - 22),(cy + 8),44,16,t);
+    } else if ($eq(kind,"Tomato")) {
+      c.create_oval((cx - 20),(cy - 5),(cx - 2),(cy + 9),$kw({fill:"#e0453a",outline:"#a02020",tags:t}));
+      c.create_oval((cx + 2),(cy - 5),(cx + 20),(cy + 9),$kw({fill:"#e0453a",outline:"#a02020",tags:t}));
+    }
+    c.create_text(cx,(y2 - 8),$kw({text:label,font:F(9,true),fill:"#3b2a1a",tags:t}));
+  }
+  draw_menu_static() {
+    let c, col, i, r, shade, t, x;
+    c = this.canvas;
+    t = "menubg";
+    c.create_rectangle(0,0,this.W,this.H,$kw({fill:"#fff0d2",outline:"",tags:t}));
+    for (i of $iter(range(16))) {
+      x = (i * 60);
+      col = ($eq($mod(i,2),0)?"#c0392b":"#ffffff");
+      c.create_polygon([[x,0],[(x + 60),0],[(x + 60),70],[(x + 30),88],[x,70]],$kw({fill:col,outline:"#8e1f14",tags:t}));
+    }
+    for (r of $iter(range(5))) {
+      for (col of $iter(range(24))) {
+        shade = ($eq($mod((r + col),2),0)?"#f4d9a6":"#e8c487");
+        c.create_rectangle((col * 40),(400 + (r * 40)),((col * 40) + 40),(440 + (r * 40)),$kw({fill:shade,outline:"",tags:t}));
+      }
+    }
+    c.create_rectangle(0,396,this.W,404,$kw({fill:"#8b5a2b",outline:"",tags:t}));
+    c.create_text(484,144,$kw({text:"BURGER RUSH",font:F(66,true),fill:"#7a1f16",tags:t}));
+    c.create_text(480,140,$kw({text:"BURGER RUSH",font:F(66,true),fill:"#ffb703",tags:t}));
+    c.create_text(480,196,$kw({text:"The fast-food restaurant game",font:F(18,true),fill:"#5c3a15",tags:t}));
+    draw_burger(c,150,380,170,["Bun","Patty","Cheese","Lettuce","Tomato","Patty","Cheese","TopBun"],24,t);
+    draw_item_icon(c,"French Fries",800,330,3.2,t);
+    draw_item_icon(c,"Soft Drink",880,340,3.2,t);
+    c.create_text(480,580,$kw({text:"Stack  |  Queue  |  Priority Queue  |  Linked List  |  Hash Map",font:F(13,true),fill:"#7a1f16",tags:t}));
+  }
+  button(x1,y1,x2,y2,text,color,action,size=14,fg="#ffffff") {
+    let c, fill, hover, mx, my;
+    c = this.canvas;
+    {const $u15 = $list(this.mouse);
+      mx = $u15[0];
+      my = $u15[1];
+    }
+    hover = (((x1 <= mx) && (mx <= x2)) && ((y1 <= my) && (my <= y2)));
+    fill = ($t(hover)?mix(color,"#ffffff",0.22):color);
+    c.create_rectangle((x1 + 3),(y1 + 3),(x2 + 3),(y2 + 3),$kw({fill:"#000000",outline:"",stipple:"gray50",tags:"dyn"}));
+    c.create_rectangle(x1,y1,x2,y2,$kw({fill:fill,outline:"#2b2b2b",width:2,tags:"dyn"}));
+    c.create_text(((x1 + x2) / 2.0),((y1 + y2) / 2.0),$kw({text:text,font:F(size,true),fill:fg,tags:"dyn"}));
+    this.hits.append([x1,y1,x2,y2,action,false]);
+  }
+  render() {
+    let action, c, glow, hand, mx, my, show_menu, want, x1, x2, y1, y2;
+    c = this.canvas;
+    c.delete("dyn");
+    this.hits = [];
+    if ((this.flash_t > 0)) {
+      this.flash_t = (this.flash_t - this.dt);
+    }
+    show_menu = $in(this.state,["menu","howto","settings","scores"]);
+    if (!$eq(show_menu,this.menu_visible)) {
+      c.itemconfigure("menubg",$kw({state:($t(show_menu)?"normal":"hidden")}));
+      this.menu_visible = show_menu;
+    }
+    if (!$t(show_menu)) {
+      this.sync_menu_panel();
+    }
+    if ($eq(this.state,"menu")) {
+      this.render_menu();
+    } else if ($eq(this.state,"howto")) {
+      this.render_howto();
+    } else if ($eq(this.state,"settings")) {
+      this.render_settings();
+    } else if ($eq(this.state,"scores")) {
+      this.render_scores();
+    } else {
+      this.render_game($eq(this.state,"playing"));
+      if ($eq(this.state,"paused")) {
+        this.render_pause();
+      } else if ($eq(this.state,"daysummary")) {
+        this.render_summary();
+      } else if ($eq(this.state,"shop")) {
+        this.render_shop();
+      } else if ($eq(this.state,"entername")) {
+        this.render_entername();
+      } else if ($in(this.state,["gameover","complete"])) {
+        this.render_end();
+      }
+    }
+    {const $u16 = $list(this.mouse);
+      mx = $u16[0];
+      my = $u16[1];
+    }
+    hand = false;
+    for ([x1,y1,x2,y2,action,glow] of $iter(reversed(this.hits))) {
+      if ((((x1 <= mx) && (mx <= x2)) && ((y1 <= my) && (my <= y2)))) {
+        hand = true;
+        if ($t(glow)) {
+          c.create_rectangle(x1,y1,x2,y2,$kw({outline:"#ffe066",width:3,tags:"dyn"}));
+        }
+        break;
+      }
+    }
+    if (($t(this.flash) && (this.flash_t > 0))) {
+      {const $u17 = $list(this.flash);
+        x1 = $u17[0];
+        y1 = $u17[1];
+        x2 = $u17[2];
+        y2 = $u17[3];
+      }
+      c.create_rectangle(x1,y1,x2,y2,$kw({outline:"#ffffff",width:3,tags:"dyn"}));
+    }
+    want = ($t(hand)?"hand2":"");
+    if (!$eq(want,this.cursor)) {
+      c.config($kw({cursor:want}));
+      this.cursor = want;
+    }
+  }
+  render_menu() {
+    let best, bx1, bx2, c, mode;
+    c = this.canvas;
+    {const $u18 = $list([350,610]);
+      bx1 = $u18[0];
+      bx2 = $u18[1];
+    }
+    this.button(bx1,224,bx2,276,"START GAME","#2e9e4f",this.start_game,22);
+    this.button(bx1,288,bx2,328,"HOW TO PLAY","#2a78c4",(()=>this.set_state("howto")),16);
+    this.button(bx1,338,bx2,378,"HIGH SCORES","#d99a1e",this.open_scores,16);
+    this.button(bx1,388,bx2,428,"SETTINGS","#8e5bb5",(()=>this.set_state("settings")),16);
+    this.button(bx1,438,bx2,478,"QUIT","#b8322a",this.close,16);
+    mode = ($t(this.career())?"Career (7 days)":"Quick goal");
+    c.create_text(480,506,$kw({text:$mod("Mode: %s    Difficulty: %s",[mode,$idx(this.settings,"difficulty")]),font:F(13,true),fill:"#5c3a15",tags:"dyn"}));
+    best = this.scores.best();
+    if ($t(best)) {
+      c.create_text(480,530,$kw({text:$mod("Best score: $%d",best),font:F(15,true),fill:"#7a1f16",tags:"dyn"}));
+    }
+  }
+  panel(x1,y1,x2,y2,title) {
+    let c;
+    c = this.canvas;
+    c.create_rectangle((x1 + 5),(y1 + 5),(x2 + 5),(y2 + 5),$kw({fill:"#000000",outline:"",stipple:"gray50",tags:"dyn"}));
+    c.create_rectangle(x1,y1,x2,y2,$kw({fill:"#fff8e1",outline:"#7a1f16",width:4,tags:"dyn"}));
+    c.create_rectangle(x1,y1,x2,(y1 + 46),$kw({fill:"#b8322a",outline:"#7a1f16",width:4,tags:"dyn"}));
+    c.create_text(((x1 + x2) / 2.0),(y1 + 24),$kw({text:title,font:F(24,true),fill:"#fff8e1",tags:"dyn"}));
+  }
+  render_howto() {
+    let c, i, last, line, lines, y;
+    c = this.canvas;
+    this.panel(60,90,900,565,"HOW TO PLAY");
+    lines = ["1.  Up to 3 customers wait at the counter. The MENU on the right lists every dish.","2.  Click RAW BEEF / CHICKEN / BUNS / POTATOES / CUPS to cook. Click food when it says READY.","3.  Cooked patties and buns wait on the WARMING RACK. Click them in menu order (Bun first).","4.  UNDO takes the top item off the plate (a Stack pop), REDO puts it back. TRASH clears it.","5.  WRAP sends the burger to the SERVING SHELF. Fries and drinks go there by themselves.","6.  Click an order card to serve it. Combos (burger + fries + drink) pay a bonus.","7.  Gold VIPs pay more, wait less, and jump to the top of the order board (Priority Queue).","8.  Random events (Rush Hour, Happy Hour, Grill Flare-up, Cold Oil) change the rules for a while.","9.  CAREER: 7 days of 100 seconds. Reach each day's money goal or lose a life.","10. Spend cash in the UPGRADE SHOP between days. New dishes arrive on days 2, 4 and 6.","11. QUICK mode: reach the target money before you lose 3 lives.","12. Keys: Esc or P = pause,  M = sound on / off.","Data structures: Stack, Queue, Priority Queue, Linked List (order history), Hash Map."];
+    y = 160;
+    for ([i,line] of $iter(enumerate(lines))) {
+      last = $eq(i,(len(lines) - 1));
+      c.create_text(90,y,$kw({anchor:"w",text:line,font:F(13,true),fill:($t(last)?"#7a1f16":"#2d1e1a"),tags:"dyn"}));
+      y = (y + 28);
+    }
+    this.button(390,520,570,556,"BACK","#b8322a",(()=>this.set_state("menu")),16);
+  }
+  render_settings() {
+    let c, col, d, i, key, label, name, on, tg, x1;
+    c = this.canvas;
+    d = "dyn";
+    this.panel(210,110,750,540,"SETTINGS");
+    c.create_text(480,184,$kw({text:"Difficulty",font:F(15,true),fill:"#2d1e1a",tags:d}));
+    for ([i,name] of $iter(enumerate(DIFFICULTY))) {
+      x1 = (240 + (i * 170));
+      on = $eq($idx(this.settings,"difficulty"),name);
+      label = $mod("%s  %ds",[name,$idx($idx(DIFFICULTY,name),"patience")]);
+      this.button(x1,198,(x1 + 150),238,label,($t(on)?"#2e9e4f":"#8a8a8a"),(($d0)=>((n=$d0)=>this.settings.__setitem__("difficulty",n)))(name),14);
+    }
+    c.create_text(480,262,$kw({text:"Game mode",font:F(15,true),fill:"#2d1e1a",tags:d}));
+    for ([i,[key,label]] of $iter(enumerate([["career","CAREER (7 days)"],["quick","QUICK GOAL"]]))) {
+      x1 = (240 + (i * 260));
+      on = $eq($idx(this.settings,"mode"),key);
+      this.button(x1,276,(x1 + 230),316,label,($t(on)?"#2e9e4f":"#8a8a8a"),(($d0)=>((k=$d0)=>this.settings.__setitem__("mode",k)))(key),14);
+    }
+    c.create_text(480,338,$kw({text:"Target money (Quick mode only)",font:F(15,true),fill:(!$t(this.career())?"#2d1e1a":"#9a8a7a"),tags:d}));
+    for ([i,tg] of $iter(enumerate(TARGETS))) {
+      x1 = (240 + (i * 170));
+      on = $eq($idx(this.settings,"target"),tg);
+      col = ($t(on)?"#2e9e4f":"#8a8a8a");
+      if ($t(this.career())) {
+        col = ($t(on)?"#b8a88a":"#cfc4b0");
+      }
+      this.button(x1,352,(x1 + 150),392,$mod("$%d",tg),col,(($d0)=>((v=$d0)=>this.settings.__setitem__("target",v)))(tg),15);
+    }
+    if ($t(this.snd.available)) {
+      label = ($t(this.snd.enabled)?"Sound: ON":"Sound: OFF");
+      this.button(360,410,600,450,label,($t(this.snd.enabled)?"#2a78c4":"#8a8a8a"),this.toggle_sound,14);
+    } else {
+      c.create_text(480,430,$kw({text:"Sound is only available on Windows (the game stays silent here).",font:F(12,true),fill:"#7a1f16",tags:d}));
+    }
+    this.button(390,466,570,510,"BACK","#b8322a",(()=>this.set_state("menu")),16);
+  }
+  dim() {
+    this.canvas.create_rectangle(0,0,this.W,this.H,$kw({fill:"#000000",stipple:"gray50",outline:"",tags:"dyn"}));
+  }
+  render_pause() {
+    let label;
+    this.dim();
+    this.panel(330,130,630,450,"PAUSED");
+    this.button(370,195,590,243,"RESUME","#2e9e4f",this.resume,18);
+    this.button(370,255,590,303,"RESTART","#2a78c4",this.start_game,18);
+    this.button(370,315,590,363,"MAIN MENU","#b8322a",this.go_menu,18);
+    if ($t(this.snd.available)) {
+      label = ($t(this.snd.enabled)?"Sound: ON":"Sound: OFF");
+      this.button(370,375,590,415,label,"#8e5bb5",this.toggle_sound,14);
+    }
+  }
+  render_summary() {
+    let c, col, d, i, label, msg, rows, s, stars, title, value, y;
+    c = this.canvas;
+    d = "dyn";
+    s = this.last_day;
+    this.dim();
+    title = $mod(($t($idx(s,"met"))?"DAY %d COMPLETE!":"DAY %d: GOAL MISSED"),$idx(s,"day"));
+    this.panel(250,70,710,540,title);
+    stars = ($mul("★",$idx(s,"stars")) + $mul("☆",(3 - $idx(s,"stars"))));
+    c.create_text(480,138,$kw({text:stars,font:F(44,true),fill:"#e0a800",tags:d}));
+    rows = [["Earned today",$mod("$%d  /  goal $%d",[$idx(s,"earned"),$idx(s,"goal")])],["Customers served",str($idx(s,"served"))],["Orders lost",str($idx(s,"missed"))],["Cash in your pocket",$mod("$%d",this.cash)]];
+    y = 205;
+    for ([label,value] of $iter(rows)) {
+      c.create_text(285,y,$kw({anchor:"w",text:label,font:F(16),fill:"#2d1e1a",tags:d}));
+      c.create_text(675,y,$kw({anchor:"e",text:value,font:F(17,true),fill:(($eq(label,"Earned today") && $t($idx(s,"met")))?"#1b7a2e":"#c0392b"),tags:d}));
+      y = (y + 40);
+    }
+    if ($t($idx(s,"met"))) {
+      msg = "Great job! The goal was reached.";
+      col = "#1b7a2e";
+    } else {
+      msg = $mod("Goal missed: you lose a life (%d left).",max(0,this.lives));
+      col = "#c0392b";
+    }
+    c.create_text(480,392,$kw({text:msg,font:F(15,true),fill:col,tags:d}));
+    for (i of $iter(range(this.START_LIVES))) {
+      c.create_text((430 + (i * 36)),428,$kw({text:"♥",font:F(28,true),fill:((i < this.lives)?"#e0453a":"#c9b9a8"),tags:d}));
+    }
+    if ((this.lives <= 0)) {
+      label = "CONTINUE";
+    } else if ((this.day >= CAREER_DAYS)) {
+      label = "FINISH THE WEEK";
+    } else {
+      label = "OPEN THE SHOP";
+    }
+    this.button(310,468,650,516,label,"#2e9e4f",this.after_summary,18);
+  }
+  render_shop() {
+    let c, cost, d, k, key, lvl, newdishes, u, y;
+    c = this.canvas;
+    d = "dyn";
+    this.dim();
+    this.panel(110,40,850,560,"UPGRADE SHOP");
+    c.create_text(480,108,$kw({text:$mod("Cash: $%d      Next: Day %d  (goal $%d)",[this.cash,(this.day + 1),this.goal_for_next_day()]),font:F(16,true),fill:"#7a1f16",tags:d}));
+    y = 126;
+    for ([key,u] of $iter(UPGRADES.items())) {
+      lvl = $idx(this.upg,key);
+      c.create_rectangle(130,y,830,(y + 50),$kw({fill:"#fff4df",outline:"#a0792c",width:2,tags:d}));
+      c.create_text(146,(y + 15),$kw({anchor:"w",text:$idx(u,"name"),font:F(15,true),fill:"#2d1e1a",tags:d}));
+      c.create_text(146,(y + 35),$kw({anchor:"w",text:$idx(u,"desc"),font:F(11),fill:"#4a3a2a",tags:d}));
+      for (k of $iter(range($idx(u,"max")))) {
+        c.create_oval((560 + (k * 24)),(y + 17),(576 + (k * 24)),(y + 33),$kw({fill:((k < lvl)?"#e0a800":"#ffffff"),outline:"#7a5a00",width:2,tags:d}));
+      }
+      if ((lvl >= $idx(u,"max"))) {
+        c.create_text(760,(y + 25),$kw({text:"MAX",font:F(15,true),fill:"#1b7a2e",tags:d}));
+      } else {
+        cost = ($idx(u,"cost") * (lvl + 1));
+        this.button(690,(y + 8),820,(y + 42),$mod("BUY  $%d",cost),((this.cash >= cost)?"#2e9e4f":"#8a8a8a"),(($d0)=>((k=$d0)=>this.buy(k)))(key),14);
+      }
+      y = (y + 54);
+    }
+    newdishes = (()=>{const r=[];for(let [n,sp] of $iter(MENU.items())){if($eq($idx(sp,"day"),(this.day + 1))){r.push(n);}} return r;})();
+    if ($t(newdishes)) {
+      c.create_text(480,462,$kw({text:$mod("New on the menu tomorrow: %s",", ".join(newdishes)),font:F(14,true),fill:"#2a78c4",tags:d}));
+    }
+    if ((this.msg_t > 0)) {
+      c.create_text(480,484,$kw({text:this.msg,font:F(13,true),fill:"#7a1f16",tags:d}));
+    }
+    this.button(310,502,650,546,$mod("START DAY %d",(this.day + 1)),"#2e9e4f",this.next_day,18);
+  }
+  goal_for_next_day() {
+    let base;
+    base = $idx(DAY_GOALS,(min((this.day + 1),len(DAY_GOALS)) - 1));
+    return int(round((base * $idx($idx(DIFFICULTY,$idx(this.settings,"difficulty")),"goal_mult"))));
+  }
+  render_scores() {
+    let anc, c, col, d, day, diff, heads, i, mode, name, played, score, served, text, x, y;
+    c = this.canvas;
+    d = "dyn";
+    this.panel(90,100,870,530,"HIGH SCORES");
+    heads = [[130,"w","#"],[170,"w","NAME"],[470,"e","SCORE"],[520,"w","MODE"],[650,"w","LEVEL"],[750,"w","DATE"]];
+    for ([x,anc,text] of $iter(heads)) {
+      c.create_text(x,172,$kw({anchor:anc,text:text,font:F(12,true),fill:"#7a1f16",tags:d}));
+    }
+    c.create_line(120,184,840,184,$kw({fill:"#7a1f16",tags:d}));
+    if (!$t(this.score_rows)) {
+      c.create_text(480,300,$kw({text:"No scores yet. Go and play a round!",font:F(16,true),fill:"#5c3a15",tags:d}));
+    }
+    for ([i,[name,score,mode,day,diff,served,played]] of $iter(enumerate(this.score_rows))) {
+      y = (202 + (i * 26));
+      col = ($eq(i,0)?"#b8860b":"#2d1e1a");
+      c.create_text(130,y,$kw({anchor:"w",text:str((i + 1)),font:F(14,true),fill:col,tags:d}));
+      c.create_text(170,y,$kw({anchor:"w",text:name,font:F(14,true),fill:col,tags:d}));
+      c.create_text(470,y,$kw({anchor:"e",text:$mod("$%d",score),font:F(14,true),fill:"#c0392b",tags:d}));
+      c.create_text(520,y,$kw({anchor:"w",text:($eq(mode,"Career")?$mod("Career day %d",day):"Quick"),font:F(13),fill:col,tags:d}));
+      c.create_text(650,y,$kw({anchor:"w",text:diff,font:F(13),fill:col,tags:d}));
+      c.create_text(750,y,$kw({anchor:"w",text:played,font:F(12),fill:col,tags:d}));
+    }
+    if (!$t(this.scores.db_ok)) {
+      c.create_text(480,470,$kw({text:"(Could not write the score file: scores are kept until you close the game)",font:F(11),fill:"#7a1f16",tags:d}));
+    }
+    this.button(390,482,570,520,"BACK","#b8322a",(()=>this.set_state("menu")),16);
+  }
+  render_entername() {
+    let c, cursor, d;
+    c = this.canvas;
+    d = "dyn";
+    this.dim();
+    this.panel(270,130,690,440,"NEW SCORE!");
+    c.create_text(480,205,$kw({text:$mod("$%d",this.score),font:F(40,true),fill:"#c0392b",tags:d}));
+    c.create_text(480,252,$kw({text:"Type your name for the high-score table, then press Enter",font:F(13,true),fill:"#2d1e1a",tags:d}));
+    c.create_rectangle(340,275,620,319,$kw({fill:"#ffffff",outline:"#7a1f16",width:3,tags:d}));
+    cursor = ($eq($mod(int(((this.clock * 2) + (time.perf_counter() * 2))),2),0)?"_":" ");
+    c.create_text(480,297,$kw({text:(this.name_buf + cursor),font:F(22,true),fill:"#2d1e1a",tags:d}));
+    this.button(380,345,580,391,"SAVE SCORE","#2e9e4f",this.save_name,17);
+  }
+  render_end() {
+    let bw, c, d, gap, i, label, n_all, names, nodes, ok, row, rows, sub, title, top, total, v, value, won, x0, x1, y, yy;
+    c = this.canvas;
+    d = "dyn";
+    won = $eq(this.state,"complete");
+    this.dim();
+    if ($t(won)) {
+      title = ($t(this.career())?"WEEK COMPLETE!":"SHIFT COMPLETE!");
+      sub = ($t(this.career())?$mod("You survived all %d days!",CAREER_DAYS):"You reached the target!");
+    } else {
+      title = "GAME OVER";
+      sub = ($t(this.career())?$mod("Out of lives on day %d.",this.day):"Too many angry customers.");
+    }
+    this.panel(110,40,850,560,title);
+    c.create_text(480,112,$kw({text:sub,font:F(15,true),fill:"#7a1f16",tags:d}));
+    rows = [["Final score",$mod("$%d",this.score)],["Customers served",str(this.served)],["Missed / failed orders",str(this.missed)],["Time played",$mod("%d:%02d",[Math.floor(int(this.clock) / 60),$mod(int(this.clock),60)])]];
+    if ($t(this.career())) {
+      rows.insert(1,["Day reached",$mod("%d / %d",[this.day,CAREER_DAYS])]);
+    }
+    y = 150;
+    for ([label,value] of $iter(rows)) {
+      c.create_text(140,y,$kw({anchor:"w",text:label,font:F(15),fill:"#2d1e1a",tags:d}));
+      c.create_text(440,y,$kw({anchor:"e",text:value,font:F(16,true),fill:"#c0392b",tags:d}));
+      y = (y + 31);
+    }
+    c.create_text(640,140,$kw({text:"TOP 5 SCORES",font:F(13,true),fill:"#7a1f16",tags:d}));
+    for ([i,row] of $iter(enumerate(this.end_top))) {
+      yy = (166 + (i * 24));
+      c.create_text(490,yy,$kw({anchor:"w",text:$mod("%d.  %s",[(i + 1),$idx(row,0)]),font:F(13,true),fill:"#2d1e1a",tags:d}));
+      c.create_text(820,yy,$kw({anchor:"e",text:$mod("$%d",$idx(row,1)),font:F(13,true),fill:"#c0392b",tags:d}));
+    }
+    n_all = len(this.history);
+    c.create_text(480,318,$kw({text:$mod("ORDER HISTORY  (singly linked list, head -> tail):  %d orders, %d served, %d lost",[n_all,this.history.count("served"),this.history.count("lost")]),font:F(12,true),fill:"#7a1f16",tags:d}));
+    nodes = this.history.last(5);
+    if (!$t(nodes)) {
+      c.create_text(480,385,$kw({text:"No orders were finished yet.",font:F(14),fill:"#5c3a15",tags:d}));
+    } else {
+      {const $u19 = $list([118,26,346]);
+        bw = $u19[0];
+        gap = $u19[1];
+        top = $u19[2];
+      }
+      total = ((len(nodes) * bw) + ((len(nodes) - 1) * gap));
+      x0 = (480 - (total / 2.0));
+      if ((n_all > len(nodes))) {
+        c.create_text((x0 - 12),(top + 36),$kw({text:"...",font:F(18,true),fill:"#7a1f16",tags:d}));
+      }
+      for ([i,v] of $iter(enumerate(nodes))) {
+        x1 = (x0 + (i * (bw + gap)));
+        ok = $eq($idx(v,"outcome"),"served");
+        c.create_rectangle(x1,top,(x1 + bw),(top + 74),$kw({fill:($t(ok)?"#e4f6e4":"#fbe3e3"),outline:($t(ok)?"#2e7d32":"#b03030"),width:2,tags:d}));
+        c.create_line((x1 + 78),top,(x1 + 78),(top + 20),$kw({fill:"#777777",tags:d}));
+        c.create_text((x1 + 38),(top + 10),$kw({text:$mod("#%d%s",[$idx(v,"id"),($t($idx(v,"vip"))?" VIP":"")]),font:F(11,true),fill:"#2d1e1a",tags:d}));
+        c.create_text((x1 + 98),(top + 10),$kw({text:"next",font:F(8),fill:"#777777",tags:d}));
+        names = "+".join((()=>{const r=[];for(let it of $iter($idx(v,"items"))){r.push($idx($idx(MENU,it),"short"));} return r;})());
+        c.create_text((x1 + (bw / 2.0)),(top + 38),$kw({text:names,width:(bw - 8),font:F(10),fill:"#2d1e1a",tags:d}));
+        c.create_text((x1 + (bw / 2.0)),(top + 62),$kw({text:($t(ok)?$mod("SERVED +$%d",$idx(v,"money")):"LOST"),font:F(11,true),fill:($t(ok)?"#1b7a2e":"#b03030"),tags:d}));
+        if ((i < (len(nodes) - 1))) {
+          c.create_line((x1 + bw),(top + 10),((x1 + bw) + gap),(top + 10),$kw({arrow:tk.LAST,width:2,fill:"#444444",tags:d}));
+        }
+      }
+      if ($eq(n_all,len(nodes))) {
+        c.create_text((x0 + 4),(top - 10),$kw({anchor:"w",text:"HEAD",font:F(10,true),fill:"#7a1f16",tags:d}));
+      }
+      c.create_text(((x0 + total) - 4),(top - 10),$kw({anchor:"e",text:"TAIL -> None",font:F(10,true),fill:"#7a1f16",tags:d}));
+    }
+    this.button(130,480,360,528,"PLAY AGAIN","#2e9e4f",this.start_game,17);
+    this.button(375,480,585,528,"HIGH SCORES","#d99a1e",this.open_scores,16);
+    this.button(600,480,830,528,"MAIN MENU","#b8322a",this.go_menu,16);
+  }
+  render_game(interactive) {
+    let _, actors, anim, busy, c, cu, cx, cy, d, f, fy, i, k, kind, label, n, name, p, pts, slots, st, t, tray, up, who, x, x1, x2, y, y1, y2;
+    c = this.canvas;
+    d = "dyn";
+    t = this.clock;
+    this.render_hud(interactive);
+    actors = (()=>{const r=[];for(let cu of $iter(this.customers)){r.push([$idx(cu,"y"),0,cu]);} return r;})();
+    actors.append([this.STAFF_Y,1,"chef"]);
+    actors.append([this.STAFF_Y,2,"waiter"]);
+    actors.sort($kw({key:((a)=>[$idx(a,0),$idx(a,1)])}));
+    for ([fy,_,who] of $iter(actors)) {
+      if ($eq(who,"chef")) {
+        busy = any(this.grill);
+        up = ($t(busy)?(0.45 + (0.3 * math.sin((t * 7.0)))):0.0);
+        draw_person(c,this.CHEF_X,this.STAFF_Y,CHEF_LOOK,new PyDict([["mood","happy"],["arm_up",up]]),d);
+      } else if ($eq(who,"waiter")) {
+        st = this.staff;
+        tray = ($t($idx(st,"items"))?list($idx(st,"items")):null);
+        up = 0.0;
+        if ($eq($idx(st,"state"),"hand")) {
+          up = 0.0;
+        }
+        draw_person(c,$idx(st,"x"),this.STAFF_Y,WAITER_LOOK,new PyDict([["walking",$idx(st,"walking")],["phase",$idx(st,"phase")],["mood","neutral"],["tray",tray],["arm_up",up]]),d);
+      } else {
+        cu = who;
+        anim = new PyDict([["walking",$in($idx(cu,"state"),["entering","leaving","angry"])],["phase",$idx(cu,"phase")],["mood",$idx(cu,"mood")]]);
+        if ($eq($idx(cu,"state"),"happy")) {
+          $set(anim,"arm_up",(0.75 + (0.25 * math.sin((t * 9.0)))));
+        }
+        draw_person(c,$idx(cu,"x"),$idx(cu,"y"),$idx(cu,"look"),anim,d);
+      }
+    }
+    st = this.staff;
+    if (($eq($idx(st,"state"),"hand") && $t($idx(st,"job")))) {
+      cx = $idx($idx($idx(st,"job"),"cust"),"home_x");
+      c.create_rectangle((cx - 34),192,(cx + 34),199,$kw({fill:"#c7ced4",outline:"#6b747b",tags:d}));
+      for ([i,name] of $iter(enumerate($slice($idx($idx(st,"job"),"items"),undefined,4,undefined)))) {
+        n = min(len($idx($idx(st,"job"),"items")),4);
+        draw_item_icon(c,name,(cx + ((i - ((n - 1) / 2.0)) * 26)),180,0.7,d);
+      }
+    }
+    for (cu of $iter(this.customers)) {
+      this.render_customer_extras(cu);
+    }
+    this.render_stations();
+    this.render_plate(interactive);
+    this.render_shelf();
+    this.render_rack(interactive);
+    this.render_orders(interactive);
+    for (f of $iter(this.flyers)) {
+      k = min(1.0,($idx(f,"t") / $idx(f,"dur")));
+      x = ($idx($idx(f,"from"),0) + (($idx(this.staff,"x") - $idx($idx(f,"from"),0)) * k));
+      y = ($idx($idx(f,"from"),1) + ((270 - $idx($idx(f,"from"),1)) * k));
+      draw_item_icon(c,$idx(f,"name"),x,y,0.7,d);
+    }
+    for (p of $iter(this.popups)) {
+      c.create_text($idx(p,"x"),$idx(p,"y"),$kw({text:$idx(p,"text"),font:F(20,true),fill:"#1b7a2e",tags:d}));
+    }
+    if ($t(interactive)) {
+      for ([kind,x1,y1,x2,y2,label] of $iter(this.BINS)) {
+        this.hits.append([x1,y1,x2,y2,(($d0)=>((k=$d0)=>this.use_bin(k)))(kind),true]);
+      }
+      for ([slots,pts] of $iter([[this.grill,this.GRILL_SLOTS],[this.toaster,this.TOASTER_SLOTS],[this.fryer,this.FRYER_SLOTS],[this.drinks,this.DRINK_SLOTS]])) {
+        for ([i,[cx,cy]] of $iter(enumerate(pts))) {
+          this.hits.append([(cx - 30),(cy - 32),(cx + 30),(cy + 40),(($d0,$d1)=>((s=$d0,i=$d1)=>this.use_slot(s,i)))(slots,i),true]);
+        }
+      }
+    }
+  }
+  render_hud(interactive) {
+    let c, col, color, d, frac, i, left, message, name, secs, text;
+    c = this.canvas;
+    d = "dyn";
+    if ($t(this.career())) {
+      c.create_text(14,17,$kw({anchor:"w",text:$mod("Day %d  $%d/$%d",[this.day,this.day_earned,this.day_goal]),font:F(15,true),fill:"#ffe066",tags:d}));
+      secs = max(0,int(math.ceil(this.day_time)));
+      c.create_text(176,17,$kw({anchor:"w",text:$mod("%d:%02d",[Math.floor(secs / 60),$mod(secs,60)]),font:F(15,true),fill:((secs <= 15)?"#ffd0d0":"#ffffff"),tags:d}));
+    } else {
+      c.create_text(14,17,$kw({anchor:"w",text:$mod("$%d / $%d",[this.score,$idx(this.settings,"target")]),font:F(17,true),fill:"#ffe066",tags:d}));
+      c.create_text(165,17,$kw({anchor:"w",text:$mod("Served: %d",this.served),font:F(14,true),fill:"#ffffff",tags:d}));
+    }
+    c.create_text(262,17,$kw({anchor:"w",text:$mod("Customers: %d/3",len(this.customers)),font:F(14,true),fill:"#ffffff",tags:d}));
+    text = ((this.msg_t > 0)?this.msg:"Click ingredients to cook. Click READY food to use it.");
+    color = ((this.msg_t > 0)?this.msg_color:"#ffd9b3");
+    c.create_text(575,17,$kw({text:$slice(text,undefined,54,undefined),font:F(12,true),fill:color,tags:d}));
+    c.create_text(772,17,$kw({anchor:"w",text:"Lives",font:F(12,true),fill:"#ffffff",tags:d}));
+    for (i of $iter(range(this.START_LIVES))) {
+      c.create_text((822 + (i * 22)),17,$kw({text:"♥",font:F(20,true),fill:((i < this.lives)?"#ff7b7b":"#6b3a3a"),tags:d}));
+    }
+    if ($t(interactive)) {
+      this.button(886,5,954,29,"PAUSE","#8a1f16",this.pause,12);
+    }
+    if ((this.event != null)) {
+      {const $u20 = $list($idx(EVENTS,$idx(this.event,"kind")));
+        name = $u20[0];
+        secs = $u20[1];
+        col = $u20[2];
+        message = $u20[3];
+      }
+      left = int(math.ceil($idx(this.event,"t")));
+      c.create_rectangle(8,40,172,62,$kw({fill:col,outline:"#ffffff",width:2,tags:d}));
+      c.create_text(90,51,$kw({text:$mod("%s  %ds",[name,left]),font:F(11,true),fill:"#ffffff",tags:d}));
+      frac = max(0.0,($idx(this.event,"t") / $idx(this.event,"dur")));
+      c.create_rectangle(8,63,(8 + (164 * frac)),67,$kw({fill:"#ffffff",outline:"",tags:d}));
+    }
+  }
+  render_customer_extras(cu) {
+    let bx, c, col, d, hy, i, items, n, name, ratio, st, x;
+    c = this.canvas;
+    d = "dyn";
+    st = $idx(cu,"state");
+    x = $idx(cu,"x");
+    if ($in(st,["ordering","waiting","delivering","happy","angry"])) {
+      c.create_rectangle((x - 58),42,(x + 58),84,$kw({fill:"#ffffff",outline:"#555555",width:1,tags:d}));
+      c.create_polygon([[(x - 8),84],[(x + 8),84],[x,96]],$kw({fill:"#ffffff",outline:"",tags:d}));
+      c.create_line((x - 8),84,x,96,(x + 8),84,$kw({fill:"#555555",tags:d}));
+      if ($eq(st,"ordering")) {
+        c.create_text(x,63,$kw({text:"Hmm...",font:F(14,true),fill:"#555555",tags:d}));
+      } else if ($eq(st,"happy")) {
+        c.create_text(x,63,$kw({text:"Thank you!",font:F(14,true),fill:"#1b7a2e",tags:d}));
+        for (i of $iter(range(3))) {
+          hy = (40 - $mod(((this.clock * 25) + (i * 14)),30));
+          c.create_text(((x - 18) + (i * 18)),(hy + 10),$kw({text:"♥",font:F(14,true),fill:"#ff5d73",tags:d}));
+        }
+      } else if ($eq(st,"angry")) {
+        c.create_text(x,63,$kw({text:"Too slow!",font:F(14,true),fill:"#c0392b",tags:d}));
+      } else {
+        items = $slice($idx(cu,"items"),undefined,3,undefined);
+        n = len(items);
+        for ([i,name] of $iter(enumerate(items))) {
+          draw_item_icon(c,name,(x + ((i - ((n - 1) / 2.0)) * 38)),63,0.8,d);
+        }
+      }
+    }
+    if ($eq(st,"waiting")) {
+      ratio = max(0.0,($idx(cu,"patience") / $idx(cu,"max_patience")));
+      col = ((ratio > 0.5)?"#5cb85c":((ratio > 0.25)?"#f0ad4e":"#d9534f"));
+      bx = $idx(cu,"home_x");
+      c.create_rectangle((bx - 38),193,(bx + 38),201,$kw({fill:"#ffffff",outline:"#333333",tags:d}));
+      c.create_rectangle((bx - 38),193,((bx - 38) + (76 * ratio)),201,$kw({fill:col,outline:"",tags:d}));
+      c.create_text((bx + 42),197,$kw({anchor:"w",text:$mod("%ds",int(math.ceil($idx(cu,"patience")))),font:F(10,true),fill:"#ffffff",tags:d}));
+      c.create_text((bx - 42),197,$kw({anchor:"e",text:$mod("#%d",$idx(cu,"id")),font:F(10,true),fill:"#ffffff",tags:d}));
+    }
+  }
+  heat_color(p,burn,raw,cooked,burnt="#1b1b1b") {
+    if ((p < 1.0)) {
+      return mix(raw,cooked,p);
+    }
+    if ($t(burn)) {
+      return mix(cooked,burnt,((p - 1.0) / (burn - 1.0)));
+    }
+    return cooked;
+  }
+  render_stations() {
+    let c, cx, cy, d, h, it, k, pts, slots, t, x;
+    c = this.canvas;
+    d = "dyn";
+    t = this.clock;
+    if ($t(any(this.grill))) {
+      for (k of $iter(range(10))) {
+        x = (26 + (k * 22));
+        h = (8 + (5 * math.sin(((t * 9) + k))));
+        c.create_polygon([[(x - 6),410],[(x + 6),410],[x,(410 - h)]],$kw({fill:"#ff7a18",outline:"",tags:d}));
+      }
+    }
+    for ([slots,pts] of $iter([[this.grill,this.GRILL_SLOTS],[this.toaster,this.TOASTER_SLOTS],[this.fryer,this.FRYER_SLOTS],[this.drinks,this.DRINK_SLOTS]])) {
+      for ([it,[cx,cy]] of $iter(zip(slots,pts))) {
+        if ((it != null)) {
+          this.draw_slot_item(it,cx,cy);
+        }
+      }
+    }
+  }
+  draw_slot_item(it,cx,cy) {
+    let bf, burn, bx1, bx2, by, c, col, d, dx, dy, frac, hw, i, kind, left, ly, p, stage, t, xx, yy;
+    c = this.canvas;
+    d = "dyn";
+    t = this.clock;
+    kind = $idx(it,"kind");
+    {const $u21 = $list(item_stage(it));
+      stage = $u21[0];
+      p = $u21[1];
+    }
+    burn = it.get("burn",$idx($idx(COOK,kind),"burn"));
+    if ($eq(kind,"Beef")) {
+      col = this.heat_color(p,burn,"#e58a9a","#7a4426");
+      c.create_oval((cx - 26),(cy - 13),(cx + 26),(cy + 13),$kw({fill:col,outline:"#3e2010",width:2,tags:d}));
+      if ((p > 0.45)) {
+        for (dx of $iter([(-12),0,12])) {
+          c.create_line(((cx + dx) - 5),(cy - 6),((cx + dx) + 5),(cy + 6),$kw({fill:"#2a1408",width:2,tags:d}));
+        }
+      }
+    } else if ($eq(kind,"Chicken")) {
+      col = this.heat_color(p,burn,"#f2c9a0","#c98a3c");
+      c.create_oval((cx - 26),(cy - 13),(cx + 26),(cy + 13),$kw({fill:col,outline:"#7a4a14",width:2,tags:d}));
+      for ([dx,dy] of $iter([[(-12),(-4)],[4,3],[14,(-5)],[(-4),6]])) {
+        c.create_oval(((cx + dx) - 2),((cy + dy) - 2),((cx + dx) + 2),((cy + dy) + 2),$kw({fill:mix(col,"#ffffff",0.3),outline:"",tags:d}));
+      }
+    } else if ($eq(kind,"Bun")) {
+      col = this.heat_color(p,burn,"#f6e2b3","#c98a35","#2a1a0a");
+      c.create_oval((cx - 15),(cy - 26),(cx + 15),(cy - 8),$kw({fill:col,outline:"#7a4a14",width:2,tags:d}));
+      c.create_rectangle((cx - 15),(cy - 17),(cx + 15),(cy + 20),$kw({fill:col,outline:"#7a4a14",width:2,tags:d}));
+      if ((p > 0.5)) {
+        for (dy of $iter([(-6),4,14])) {
+          c.create_line((cx - 10),(cy + dy),(cx + 10),(cy + dy),$kw({fill:mix(col,"#2a1a0a",0.5),width:2,tags:d}));
+        }
+      }
+    } else if ($eq(kind,"Fries")) {
+      col = this.heat_color(p,burn,"#f7efc6","#f0b429","#3b2410");
+      for (i of $iter(range((-3),4))) {
+        c.create_rectangle(((cx + (i * 6)) - 2),((cy - 20) + ($mod(i,2) * 5)),((cx + (i * 6)) + 2),(cy + 6),$kw({fill:col,outline:"#8a6a10",tags:d}));
+      }
+      c.create_rectangle((cx - 24),(cy - 4),(cx + 24),(cy + 18),$kw({fill:"",outline:"#444444",width:2,tags:d}));
+      for (i of $iter(range((-2),3))) {
+        c.create_line((cx + (i * 10)),(cy - 4),(cx + (i * 10)),(cy + 18),$kw({fill:"#444444",tags:d}));
+      }
+      if ($eq(stage,"cooking")) {
+        for (i of $iter(range(3))) {
+          by = ((cy + 16) - $mod(((t * 20) + (i * 7)),12));
+          c.create_oval(((cx - 16) + (i * 14)),(by - 2),((cx - 12) + (i * 14)),(by + 2),$kw({fill:"#fff6c8",outline:"",tags:d}));
+        }
+      }
+    } else if ($eq(kind,"Drink")) {
+      frac = min(1.0,p);
+      c.create_polygon([[(cx - 14),(cy - 18)],[(cx + 14),(cy - 18)],[(cx + 10),(cy + 18)],[(cx - 10),(cy + 18)]],$kw({fill:"#f4f4f4",outline:"#888888",width:2,tags:d}));
+      if ((frac > 0)) {
+        ly = ((cy + 17) - (34 * frac));
+        hw = (9 + (4 * (((cy + 17) - ly) / 34.0)));
+        c.create_polygon([[(cx - hw),ly],[(cx + hw),ly],[(cx + 9),(cy + 17)],[(cx - 9),(cy + 17)]],$kw({fill:"#7b3f1d",outline:"",tags:d}));
+      }
+      if ($eq(stage,"cooking")) {
+        c.create_line(cx,350,cx,((frac > 0)?ly:(cy + 10)),$kw({fill:"#7b3f1d",width:3,tags:d}));
+      } else {
+        c.create_rectangle((cx - 15),(cy - 22),(cx + 15),(cy - 18),$kw({fill:"#d62828",outline:"#7a0f0f",tags:d}));
+        c.create_line((cx + 3),(cy - 22),(cx + 8),(cy - 36),$kw({fill:"#2a9d8f",width:3,tags:d}));
+      }
+    }
+    if (($eq(stage,"cooking") && $in(kind,["Beef","Chicken","Bun"]))) {
+      for (i of $iter(range(3))) {
+        yy = ((cy - 18) - $mod(((t * 22) + (i * 9)),20));
+        xx = ((cx + ((i - 1) * 9)) + (math.sin(((t * 3) + i)) * 2));
+        c.create_oval((xx - 2.5),(yy - 2.5),(xx + 2.5),(yy + 2.5),$kw({fill:"#e8e8e8",outline:"",tags:d}));
+      }
+    }
+    {const $u22 = $list([(cx - 24),(cx + 24),(cy + 22)]);
+      bx1 = $u22[0];
+      bx2 = $u22[1];
+      by = $u22[2];
+    }
+    c.create_rectangle(bx1,by,bx2,(by + 11),$kw({fill:"#ffffff",outline:"#444444",tags:d}));
+    col = ($eq(stage,"cooking")?"#f39c12":($eq(stage,"ready")?"#2ecc71":"#c0392b"));
+    c.create_rectangle(bx1,by,(bx1 + (48 * min(1.0,p))),(by + 11),$kw({fill:col,outline:"",tags:d}));
+    if ($eq(stage,"cooking")) {
+      left = int(math.ceil((it.get("time",$idx($idx(COOK,kind),"time")) - $idx(it,"t"))));
+      c.create_text(cx,(by + 6),$kw({text:$mod("%ds",left),font:F(9,true),fill:"#2d1e1a",tags:d}));
+    } else if ($eq(stage,"ready")) {
+      if ($eq($mod(int((t * 3)),2),0)) {
+        c.create_rectangle((cx - 30),(cy - 32),(cx + 30),(cy + 20),$kw({fill:"",outline:"#2ecc71",width:3,tags:d}));
+      }
+      c.create_text(cx,(by + 6),$kw({text:"READY!",font:F(9,true),fill:"#ffffff",tags:d}));
+      if ($t(burn)) {
+        bf = min(1.0,((p - 1.0) / (burn - 1.0)));
+        c.create_rectangle(bx1,(by + 13),bx2,(by + 17),$kw({fill:"#ffffff",outline:"#444444",tags:d}));
+        c.create_rectangle(bx1,(by + 13),(bx1 + (48 * bf)),(by + 17),$kw({fill:"#c0392b",outline:"",tags:d}));
+      }
+    } else {
+      c.create_text(cx,(by + 6),$kw({text:"BURNT!",font:F(9,true),fill:"#ffffff",tags:d}));
+    }
+  }
+  render_plate(interactive) {
+    let action, buttons, c, col, d, gy, label, layers, size, x1, x2;
+    c = this.canvas;
+    d = "dyn";
+    layers = this.plate.to_list();
+    draw_burger(c,this.PLATE_X,this.PLATE_Y,96,layers,15,d);
+    if (($t(layers) && $eq($idx(layers,0),"Bun"))) {
+      gy = (this.PLATE_Y - (len(layers) * 15));
+      c.create_arc((this.PLATE_X - 48),(gy - 15),(this.PLATE_X + 48),(gy + 15),$kw({start:0,extent:180,style:"arc",outline:"#f6e3c4",width:2,dash:[3,3],tags:d}));
+      c.create_text((this.PLATE_X + 52),(gy - 5),$kw({anchor:"w",text:"top bun",font:F(8,true),fill:"#f6e3c4",tags:d}));
+    }
+    c.create_text(417,488,$kw({anchor:"e",text:$mod("Plate %d/%d",[len(layers),this.PLATE_MAX]),font:F(10,true),fill:"#f6e3c4",tags:d}));
+    c.create_text(160,490,$kw({anchor:"w",text:$mod("Top: %s",(this.plate.peek() || "empty")),font:F(10,true),fill:"#f6e3c4",tags:d}));
+    if (!$t(this.redo.is_empty())) {
+      c.create_text(417,501,$kw({anchor:"e",text:$mod("Aside: %s (%d)",[this.redo.peek(),this.redo.size()]),font:F(10,true),fill:"#ffe066",tags:d}));
+    }
+    buttons = [[16,86,"WRAP","#2e9e4f",this.wrap_burger,13],[92,144,"UNDO","#d99a1e",this.undo_plate,12],[150,202,"REDO",(!$t(this.redo.is_empty())?"#2a78c4":"#8a8a8a"),this.redo_plate,12],[208,264,"TRASH","#c0392b",this.discard_plate,11]];
+    for ([x1,x2,label,col,action,size] of $iter(buttons)) {
+      if ($t(interactive)) {
+        this.button(x1,548,x2,588,label,col,action,size);
+      } else {
+        c.create_rectangle(x1,548,x2,588,$kw({fill:col,outline:"#2b2b2b",width:2,tags:d}));
+        c.create_text(((x1 + x2) / 2.0),568,$kw({text:label,font:F(size,true),fill:"#ffffff",tags:d}));
+      }
+    }
+  }
+  render_shelf() {
+    let i, name, sx, sy;
+    for ([i,name] of $iter(enumerate(this.shelf))) {
+      {const $u23 = $list(this.shelf_pos(i));
+        sx = $u23[0];
+        sy = $u23[1];
+      }
+      draw_item_icon(this.canvas,name,sx,sy,0.7,"dyn");
+    }
+  }
+  render_rack(interactive) {
+    let c, d, dx, dy, i, name, sx, sy;
+    c = this.canvas;
+    d = "dyn";
+    for ([i,name] of $iter(enumerate(this.rack))) {
+      {const $u24 = $list(this.rack_pos(i));
+        sx = $u24[0];
+        sy = $u24[1];
+      }
+      if ($eq(name,"Patty")) {
+        c.create_oval((sx - 17),(sy - 13),(sx + 17),(sy + 1),$kw({fill:"#7a4426",outline:"#3e2010",width:2,tags:d}));
+        for (dx of $iter([(-8),0,8])) {
+          c.create_line(((sx + dx) - 3),(sy - 9),((sx + dx) + 3),(sy - 3),$kw({fill:"#2a1408",width:2,tags:d}));
+        }
+      } else if ($eq(name,"Chicken")) {
+        c.create_oval((sx - 17),(sy - 13),(sx + 17),(sy + 1),$kw({fill:"#c98a3c",outline:"#7a4a14",width:2,tags:d}));
+        for ([dx,dy] of $iter([[(-8),(-8)],[3,(-5)],[10,(-9)]])) {
+          c.create_oval(((sx + dx) - 1.5),((sy + dy) - 1.5),((sx + dx) + 1.5),((sy + dy) + 1.5),$kw({fill:"#e8b868",outline:"",tags:d}));
+        }
+      } else {
+        draw_burger(c,sx,(sy + 1),30,["Bun","TopBun"],7,d);
+      }
+      c.create_text(sx,(sy + 11),$kw({text:name,font:F(8,true),fill:"#4a3a2a",tags:d}));
+      if ($t(interactive)) {
+        this.hits.append([(sx - 23),(sy - 17),(sx + 23),(sy + 17),(($d0)=>((i=$d0)=>this.use_rack(i)))(i),true]);
+      }
+    }
+  }
+  render_orders(interactive) {
+    let all_ready, bcol, by1, by2, c, cards, col, cu, d, have, j, k, label, ly, name, ratio, ready, secs, title, vip, x1, x2, y;
+    c = this.canvas;
+    d = "dyn";
+    {const $u25 = $list([(this.PLAY_W + 6),(this.W - 6)]);
+      x1 = $u25[0];
+      x2 = $u25[1];
+    }
+    cards = $slice(this.board.to_list(),undefined,3,undefined);
+    for (k of $iter(range(3))) {
+      y = (348 + (k * 84));
+      if ((k >= len(cards))) {
+        c.create_rectangle(x1,y,x2,(y + 80),$kw({fill:"#3a2a25",outline:"#5a463d",tags:d}));
+        if ($eq(k,0)) {
+          c.create_text(((x1 + x2) / 2.0),(y + 40),$kw({text:"Waiting for customers...",font:F(12,true),fill:"#a08a7a",tags:d}));
+        }
+        continue;
+      }
+      cu = $idx(cards,k);
+      ratio = max(0.0,($idx(cu,"patience") / $idx(cu,"max_patience")));
+      vip = $idx(cu,"vip");
+      c.create_rectangle(x1,y,x2,(y + 80),$kw({fill:($t(vip)?"#fff0b3":"#fff4df"),outline:($t(vip)?"#d4a017":"#a0792c"),width:($t(vip)?3:2),tags:d}));
+      title = $mod(($t(vip)?"VIP order #%d":"Order #%d"),$idx(cu,"id"));
+      if ((cu === this.board.peek())) {
+        title = (title + " - NEXT");
+      }
+      c.create_text((x1 + 8),(y + 11),$kw({anchor:"w",text:title,font:F(12,true),fill:($t(vip)?"#8a5a00":"#2d1e1a"),tags:d}));
+      secs = int(math.ceil($idx(cu,"patience")));
+      c.create_text((x2 - 8),(y + 11),$kw({anchor:"e",text:$mod("%ds",secs),font:F(13,true),fill:((ratio < 0.3)?"#c0392b":"#2d1e1a"),tags:d}));
+      bcol = ((ratio > 0.5)?"#5cb85c":((ratio > 0.25)?"#f0ad4e":"#d9534f"));
+      c.create_rectangle((x1 + 8),(y + 21),(x2 - 8),(y + 27),$kw({fill:"#ffffff",outline:"#444444",tags:d}));
+      c.create_rectangle((x1 + 8),(y + 21),((x1 + 8) + (((x2 - x1) - 16) * ratio)),(y + 27),$kw({fill:bcol,outline:"",tags:d}));
+      have = list(this.shelf);
+      all_ready = true;
+      for ([j,name] of $iter(enumerate($slice($idx(cu,"items"),undefined,3,undefined)))) {
+        ready = $in(name,have);
+        if ($eq($idx(cu,"state"),"delivering")) {
+          ready = true;
+        } else if ($t(ready)) {
+          have.remove(name);
+        } else {
+          all_ready = false;
+        }
+        ly = ((y + 36) + (j * 11));
+        c.create_rectangle((x1 + 8),(ly - 4),(x1 + 16),(ly + 4),$kw({fill:($t(ready)?"#2ecc71":"#ffffff"),outline:"#444444",tags:d}));
+        if ($t(ready)) {
+          c.create_line((x1 + 9.5),ly,(x1 + 11.5),(ly + 2.5),(x1 + 15),(ly - 2.5),$kw({fill:"#ffffff",width:2,tags:d}));
+        }
+        c.create_text((x1 + 22),ly,$kw({anchor:"w",text:name,font:F(10,true),fill:($t(ready)?"#1b7a2e":"#6b3a2a"),tags:d}));
+      }
+      if ($t($idx(cu,"combo"))) {
+        c.create_text((x2 - 8),(y + 47),$kw({anchor:"e",text:$mod("COMBO +$%d",COMBO_BONUS),font:F(10,true),fill:"#b8860b",tags:d}));
+      }
+      {const $u26 = $list([(y + 63),(y + 77)]);
+        by1 = $u26[0];
+        by2 = $u26[1];
+      }
+      if ($eq($idx(cu,"state"),"delivering")) {
+        c.create_rectangle((x1 + 8),by1,(x2 - 8),by2,$kw({fill:"#2a78c4",outline:"#1c4f82",tags:d}));
+        c.create_text(((x1 + x2) / 2.0),((by1 + by2) / 2.0),$kw({text:"DELIVERING...",font:F(10,true),fill:"#ffffff",tags:d}));
+      } else {
+        label = ($t(all_ready)?"SERVE":"Missing items");
+        col = ($t(all_ready)?"#2e9e4f":"#8a8a8a");
+        if ($t(interactive)) {
+          this.button((x1 + 8),by1,(x2 - 8),by2,label,col,(($d0)=>((cu=$d0)=>this.try_serve(cu)))(cu),10);
+        } else {
+          c.create_rectangle((x1 + 8),by1,(x2 - 8),by2,$kw({fill:col,outline:"#2b2b2b",tags:d}));
+          c.create_text(((x1 + x2) / 2.0),((by1 + by2) / 2.0),$kw({text:label,font:F(10,true),fill:"#ffffff",tags:d}));
+        }
+      }
+    }
+  }
+}
+BurgerRush.prototype.W = 960;
+BurgerRush.prototype.H = 600;
+BurgerRush.prototype.PLAY_W = 740;
+BurgerRush.prototype.SLOT_X = [240,400,560];
+BurgerRush.prototype.LANE_BACK = 166;
+BurgerRush.prototype.LANE_FRONT = 186;
+BurgerRush.prototype.DOOR_X = 36;
+BurgerRush.prototype.CHEF_X = 118;
+BurgerRush.prototype.STAFF_Y = 306;
+BurgerRush.prototype.WAITER_HOME = 690;
+BurgerRush.prototype.PLATE_X = 340;
+BurgerRush.prototype.PLATE_Y = 584;
+BurgerRush.prototype.PLATE_MAX = 6;
+BurgerRush.prototype.SHELF_MAX = 6;
+BurgerRush.prototype.RACK_MAX = 6;
+BurgerRush.prototype.START_LIVES = 3;
+BurgerRush.prototype.FRAME_MS = 40;
+BurgerRush.prototype.TIP_RATE = 0.3;
+BurgerRush.prototype.VIP_CHANCE = 0.2;
+BurgerRush.prototype.VIP_PRICE_MULT = 1.5;
+BurgerRush.prototype.VIP_PATIENCE_MULT = 0.75;
+BurgerRush.prototype.WAITER_SPEED = 250.0;
+BurgerRush.prototype.CUSTOMER_IN_SPEED = 130.0;
+BurgerRush.prototype.GRILL_SLOTS = [[64,372],[134,372],[204,372]];
+BurgerRush.prototype.TOASTER_SLOTS = [[306,372],[354,372]];
+BurgerRush.prototype.FRYER_SLOTS = [[448,372],[506,372]];
+BurgerRush.prototype.DRINK_SLOTS = [[598,372],[682,372]];
+BurgerRush.prototype.BINS = [["Beef",14,424,96,470,"RAW BEEF (8s)"],["Chicken",104,424,186,470,"CHICKEN (9s)"],["Bun",290,424,372,470,"BUNS (4s)"],["Fries",432,424,514,470,"POTATOES (7s)"],["Drink",612,424,694,470,"CUPS (3s)"],["Cheese",16,500,92,540,"CHEESE"],["Lettuce",100,500,176,540,"LETTUCE"],["Tomato",184,500,260,540,"TOMATO"]];
+
+const $=s=>document.querySelector(s);
+function scr(h){const s=$("#scr");s.innerHTML='<div class="in">'+h+"</div>";s.style.display="block";s.scrollTop=0}
+function home(){scr(`<div data-a="intro" style="min-height:88vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center"><div class="ttl">BURGER<br>RUSH</div>
+<div class="stk"><div class="l bunb" style="--d:.2s"></div><div class="l pat" style="--d:.7s"></div><div class="l chz" style="--d:1.2s"></div><div class="l let" style="--d:1.7s"></div><div class="l tom" style="--d:2.1s"></div><div class="l bunt" style="--d:2.6s"></div></div>
+<div class="tap">Tap the burger to continue</div></div>`)}
+function rules(){scr(`<div class="ttl s">BURGER RUSH</div><div class="bg">
+<div class="ly bt" style="--d:.1s"><b>1</b>Customers order. Read the menu and cook what they ask for.</div>
+<div class="ly pt" style="--d:.4s"><b>2</b>Tap food when it is READY, before it burns. Meat and buns go to the rack.</div>
+<div class="ly ch" style="--d:.7s"><b>3</b>Stack the burger bottom to top, then tap WRAP.</div>
+<div class="ly bb" style="--d:1s"><b>4</b>Tap the order to serve it. Gold ⭐ VIPs pay more!</div></div>
+<p style="text-align:center;color:var(--mut)">7 days · 100 seconds each · hit the money goal or lose a life</p>
+${bestHtml()}
+<button class="btn chef" data-a="chef">👨‍🍳 Let’s be a chef!<br><small>START CAREER</small></button>`)}
+function bestHtml(){const sb=new ScoreBoard(),t=sb.top(3);return t.length?`<div class="card" style="color:#2b1d12;text-align:center"><b>🏆 Best score: $${sb.best()}</b>`+t.map((r,i)=>`<br><small>${i+1}. ${r[0]} · $${r[1]} · day ${r[3]}</small>`).join("")+`</div>`:'<p style="text-align:center;color:var(--mut)">🏆 No score yet. Be the first!</p>'}
+let app=null;
+function startGame(){$("#scr").style.display="none";$("#gw").style.display="block";
+ if(!app){app=new BurgerRush(new tk.Tk());const f=app.finish;app.finish=function(o){f.call(this,o);if(this.state=="entername"){this.last_name="Chef";this.name_buf="Chef";this.save_name()}}}
+ app.start_game();new Sound().play("win");$("#gw").classList.add("on");try{const f=document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();f&&f.then(()=>screen.orientation&&screen.orientation.lock&&screen.orientation.lock("landscape")).catch(()=>{})}catch(e){}}
+document.addEventListener("pointerup",e=>{const b=e.target.closest("[data-a]");if(!b)return;if(b.dataset.a=="intro")rules();else if(b.dataset.a=="chef")startGame()});
+window.addEventListener("error",ev=>{const d=document.createElement("div");d.style.cssText="position:fixed;left:8px;right:8px;bottom:8px;z-index:99;background:#c0392b;color:#fff;padding:10px;border-radius:10px;font-size:13px";d.textContent="Error: "+ev.message;document.body.appendChild(d)});
+function chk(){if(app&&innerHeight>innerWidth&&app.state=='playing')app.pause()}addEventListener('resize',chk);addEventListener('orientationchange',chk);
+home();
+
+</script></body></html>
